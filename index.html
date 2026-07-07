@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinematic Visuals | Luxury Portfolio</title>
+    
+    <!-- Premium Fonts for Editorial Vibe -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Syncopate:wght@400;700&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- RESET & BASE --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background-color: #0a0a0a; 
+            color: #f4f4f0; 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden; 
+        }
+
+        /* --- SMOOTH SCROLL CONTAINER --- */
+        .scroll-container {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .horizontal-wrapper {
+            display: flex;
+            width: 400vw; /* 4 sections = 400% of viewport width */
+            height: 100vh;
+            will-change: transform;
+        }
+
+        /* --- SECTION STYLES --- */
+        .panel {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 5vw;
+        }
+
+        /* --- PANEL 1: TYPOGRAPHY VIDEO MASK --- */
+        .intro-panel {
+            background-color: #0a0a0a;
+        }
+
+        .intro-text-wrapper {
+            position: relative;
+            z-index: 2;
+        }
+
+        .massive-text {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 12vw;
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 0.9;
+            text-align: center;
+            
+            /* The Magic Trick: Video plays inside the text */
+            background: url('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop') center/cover;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+        }
+
+        .sub-text {
+            margin-top: 20px;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.5rem;
+            color: #888;
+            text-align: center;
+        }
+
+        /* --- PANEL 2: THE PARALLAX GALLERY --- */
+        .gallery-panel {
+            background-color: #111;
+            flex-direction: row;
+            justify-content: center;
+            gap: 5vw;
+        }
+
+        .image-container {
+            width: 30vw;
+            height: 70vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 130%; /* Taller than container for parallax room */
+            object-fit: cover;
+            position: absolute;
+            top: -15%; /* Start slightly high */
+            will-change: transform;
+        }
+
+        .text-block {
+            width: 25vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .text-block h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .text-block p {
+            font-size: 0.9rem;
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        /* --- PANEL 3: THE VERTICAL CAMPAIGN --- */
+        .vertical-campaign-panel {
+            background-color: #0a0a0a;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .phone-mockup {
+            width: 300px;
+            height: 600px;
+            border: 2px solid #333;
+            border-radius: 40px;
+            overflow: hidden;
+            position: relative;
+            background-color: #000;
+            box-shadow: 0 0 50px rgba(255,255,255,0.05);
+        }
+
+        .phone-mockup img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .phone-mockup:hover img {
+            opacity: 1;
+        }
+
+        .campaign-title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Syncopate', sans-serif;
+            font-size: 6vw;
+            color: white;
+            white-space: nowrap;
+            mix-blend-mode: difference;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* --- PANEL 4: CONTACT / OUTRO --- */
+        .outro-panel {
+            background-color: #f4f4f0;
+            color: #0a0a0a;
+        }
+
+        .outro-panel .massive-text {
+            background: none;
+            -webkit-text-fill-color: #0a0a0a;
+            color: #0a0a0a;
+        }
+
+        /* --- FLOATING PROGRESS BAR --- */
+        .progress-bar {
+            position: fixed;
+            bottom: 40px;
+            left: 5vw;
+            width: 90vw;
+            height: 2px;
+            background-color: rgba(255,255,255,0.1);
+            z-index: 99;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="progress-bar">
+        <div class="progress-fill" id="progress"></div>
+    </div>
+
+    <!-- The pin container that stays on screen while content moves -->
+    <div class="scroll-container" id="scroll-container">
+        
+        <!-- The actual wide container moving on X axis -->
+        <div class="horizontal-wrapper" id="horizontal-wrapper">
+            
+            <!-- Panel 1 -->
+            <section class="panel intro-panel">
+                <div class="intro-text-wrapper">
+                    <h1 class="massive-text">CINEMATIC<br>VISION</h1>
+                    <p class="sub-text">Scroll to explore the visual narrative</p>
+                </div>
+            </section>
+
+            <!-- Panel 2 -->
+            <section class="panel gallery-panel">
+                <div class="text-block">
+                    <h2>The Art of the Frame</h2>
+                    <p>Capturing the raw emotion and undeniable elegance of high-end events. Every frame is treated like a still from a feature film, meticulously graded and composed to preserve the legacy of the moment.</p>
+                </div>
+                <div class="image-container">
+                    <img class="parallax-img" src="https://images.unsplash.com/photo-1606800052052-a08af7148866?q=80&w=1974&auto=format&fit=crop" alt="Editorial Frame">
+                </div>
+            </section>
+
+            <!-- Panel 3 -->
+            <section class="panel vertical-campaign-panel">
+                <div class="phone-mockup">
+                    <img class="parallax-img" src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1974&auto=format&fit=crop" alt="Vertical Campaign">
+                </div>
+                <h2 class="campaign-title">VERTICAL CAMPAIGNS</h2>
+            </section>
+
+            <!-- Panel 4 -->
+            <section class="panel outro-panel">
+                <div class="intro-text-wrapper">
+                    <h1 class="massive-text">BOOK<br>THE<br>STUDIO</h1>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- GSAP & ScrollTrigger Core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        // Register the ScrollTrigger plugin
+        gsap.registerPlugin(ScrollTrigger);
+
+        const wrapper = document.getElementById("horizontal-wrapper");
+        const panels = gsap.utils.toArray(".panel");
+
+        // 1. THE HORIZONTAL SCROLL HIJACK
+        // This pins the container and translates the wrapper to the left as you scroll down
+        let scrollTween = gsap.to(wrapper, {
+            xPercent: -100 * (panels.length - 1),
+            ease: "none",
+            scrollTrigger: {
+                trigger: "#scroll-container",
+                pin: true,
+                scrub: 1, // Smooth scrubbing (adds slight lag/weight)
+                end: () => "+=" + wrapper.offsetWidth // Total scroll distance equals width of the entire wrapper
+            }
+        });
+
+        // 2. THE IMAGE PARALLAX EFFECT
+        // As the user scrolls horizontally, the images move slightly in the opposite direction inside their containers
+        gsap.utils.toArray(".parallax-img").forEach(image => {
+            gsap.to(image, {
+                y: "25%", // Move the image down slightly inside its box
+                ease: "none",
+                scrollTrigger: {
+                    trigger: image.parentElement,
+                    containerAnimation: scrollTween, // Tie this animation to the horizontal movement!
+                    start: "left right", // When left side of container hits right side of viewport
+                    end: "right left",   // When right side of container hits left side of viewport
+                    scrub: true
+                }
+            });
+        });
+
+        // 3. THE PROGRESS BAR
+        gsap.to("#progress", {
+            width: "100%",
+            ease: "none",
+            scrollTrigger: {
+                trigger: "#scroll-container",
+                start: "top top",
+                end: () => "+=" + wrapper.offsetWidth,
+                scrub: true
+            }
+        });
+    </script>
+</body>
+</html>
