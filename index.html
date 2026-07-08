@@ -19,11 +19,11 @@
            ========================================================================== */
         :root {
             /* Colors */
-            --clr-bg-dark: #040d08;       /* Deep Forest / Emerald Black */
-            --clr-bg-surface: #0a1f14;    /* Slightly lighter green for cards */
-            --clr-gold: #d4af37;          /* Metallic Gold */
-            --clr-gold-muted: #967d2b;    /* Darker gold for subtle text */
-            --clr-bone: #e6e4dc;          /* Warm Ivory for main text */
+            --clr-bg-dark: #040d08;       
+            --clr-bg-surface: #07160e;    
+            --clr-gold: #d4af37;          
+            --clr-gold-muted: #967d2b;    
+            --clr-bone: #e6e4dc;          
             --clr-white: #ffffff;
             --clr-border: rgba(212, 175, 55, 0.15);
             --clr-overlay: rgba(4, 13, 8, 0.85);
@@ -37,60 +37,33 @@
             --container-padding: clamp(1.5rem, 5vw, 4rem);
             
             /* Transitions */
-            --transition-smooth: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            --transition-smooth: 0.6s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         /* ==========================================================================
            2. RESET & BASE
            ========================================================================== */
         *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            margin: 0; padding: 0; box-sizing: border-box;
         }
 
-        html {
-            scroll-behavior: auto; /* Handled by GSAP if needed, default auto is fine for smooth standard scrolling */
-        }
+        html { scroll-behavior: auto; }
 
         body {
-            background-color: var(--clr-bg-dark);
-            color: var(--clr-bone);
-            font-family: var(--font-sans);
-            font-size: 1rem;
-            line-height: 1.6;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            background-color: var(--clr-bg-dark); color: var(--clr-bone);
+            font-family: var(--font-sans); font-size: 1rem; line-height: 1.6;
+            overflow-x: hidden; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Accessibility: Reduce motion if user prefers */
+        /* Accessibility: Reduce motion */
         @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
+            * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
         }
 
-        /* Hide elements visually but keep for screen readers */
-        .sr-only {
-            position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-            overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
-        }
-
-        img {
-            max-width: 100%;
-            display: block;
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
+        img { max-width: 100%; display: block; }
+        a { color: inherit; text-decoration: none; }
         ul { list-style: none; }
+        button { font-family: inherit; }
 
         /* ==========================================================================
            3. CUSTOM CURSOR (Desktop Only)
@@ -101,12 +74,10 @@
                 position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
                 border-radius: 50%; z-index: 9999; pointer-events: none;
             }
-            .cursor-dot {
-                width: 6px; height: 6px; background-color: var(--clr-gold);
-            }
+            .cursor-dot { width: 4px; height: 4px; background-color: var(--clr-gold); }
             .cursor-outline {
                 width: 40px; height: 40px; border: 1px solid rgba(212, 175, 55, 0.4);
-                transition: width 0.3s, height 0.3s, background-color 0.3s;
+                transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
             }
             .cursor-hover .cursor-outline {
                 width: 60px; height: 60px; background-color: rgba(212, 175, 55, 0.1); border-color: var(--clr-gold);
@@ -114,6 +85,8 @@
         }
         @media (hover: none) or (pointer: coarse) {
             .cursor-dot, .cursor-outline { display: none !important; }
+            * { cursor: auto !important; }
+            button, a { cursor: pointer !important; }
         }
 
         /* ==========================================================================
@@ -125,62 +98,26 @@
         }
         .preloader-brand {
             font-family: var(--font-serif); font-size: 2.5rem; color: var(--clr-gold);
-            letter-spacing: 4px; margin-bottom: 2rem; opacity: 0;
+            letter-spacing: 4px; overflow: hidden;
+        }
+        .preloader-brand span {
+            display: inline-block; transform: translateY(100%); opacity: 0;
         }
         .loader-line-wrapper {
-            width: 200px; height: 1px; background: rgba(255,255,255,0.1); overflow: hidden;
+            width: 150px; height: 1px; background: rgba(255,255,255,0.1); overflow: hidden; margin-top: 1.5rem;
         }
         .loader-line {
             width: 0%; height: 100%; background: var(--clr-gold);
         }
 
         /* ==========================================================================
-           5. LAYOUT & COMPONENTS
+           5. LAYOUT, COMPONENTS & TYPOGRAPHY
            ========================================================================== */
-        .container {
-            max-width: 1400px; margin: 0 auto; padding: 0 var(--container-padding);
-        }
-
-        .section {
-            padding-block: var(--section-padding);
-            position: relative;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-flex; align-items: center; justify-content: center;
-            padding: 1rem 2.5rem; font-family: var(--font-sans); font-size: 0.8rem;
-            text-transform: uppercase; letter-spacing: 2px; font-weight: 500;
-            border: 1px solid transparent; cursor: pointer; transition: var(--transition-smooth);
-            position: relative; overflow: hidden; text-align: center;
-        }
-        
-        .btn-gold {
-            background: var(--clr-gold); color: var(--clr-bg-dark); border-color: var(--clr-gold);
-        }
-        .btn-gold:hover, .btn-gold:focus-visible {
-            background: var(--clr-bone); border-color: var(--clr-bone); color: var(--clr-bg-dark);
-            outline: none;
-        }
-
-        .btn-outline {
-            background: transparent; color: var(--clr-gold); border-color: var(--clr-border);
-        }
-        .btn-outline::before {
-            content: ''; position: absolute; inset: 0; background: var(--clr-gold);
-            transform: scaleY(0); transform-origin: bottom; transition: transform var(--transition-smooth); z-index: -1;
-        }
-        .btn-outline:hover, .btn-outline:focus-visible {
-            color: var(--clr-bg-dark); border-color: var(--clr-gold); outline: none;
-        }
-        .btn-outline:hover::before, .btn-outline:focus-visible::before {
-            transform: scaleY(1);
-        }
-
-        /* Typography Utilities */
-        .text-gold { color: var(--clr-gold); }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 var(--container-padding); }
+        .section { padding-block: var(--section-padding); position: relative; }
         .text-center { text-align: center; }
-        
+        .text-gold { color: var(--clr-gold); }
+
         .heading-xl { font-family: var(--font-serif); font-size: clamp(3rem, 8vw, 6rem); line-height: 1.1; font-weight: 400; }
         .heading-lg { font-family: var(--font-serif); font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.2; font-weight: 400; margin-bottom: 1.5rem; }
         .heading-md { font-family: var(--font-serif); font-size: clamp(1.5rem, 3vw, 2.5rem); font-weight: 400; }
@@ -190,148 +127,206 @@
             letter-spacing: 4px; color: var(--clr-gold-muted); margin-bottom: 1rem;
         }
 
+        /* Reveal Masks */
+        .reveal-mask { overflow: hidden; display: inline-block; vertical-align: top; }
+        .reveal-mask span { display: inline-block; transform: translateY(100%); }
+        .clip-reveal { clip-path: inset(100% 0 0 0); }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 1.2rem 3rem; font-family: var(--font-sans); font-size: 0.8rem;
+            text-transform: uppercase; letter-spacing: 2px; font-weight: 500;
+            border: 1px solid transparent; cursor: pointer; transition: var(--transition-smooth);
+            position: relative; overflow: hidden; text-align: center;
+        }
+        
+        .btn-gold {
+            background: var(--clr-gold); color: var(--clr-bg-dark); border-color: var(--clr-gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+        .btn-gold:hover, .btn-gold:focus-visible {
+            background: var(--clr-bone); border-color: var(--clr-bone); color: var(--clr-bg-dark);
+            box-shadow: 0 0 25px rgba(230, 228, 220, 0.5); outline: none;
+        }
+
+        .btn-outline { background: transparent; color: var(--clr-gold); border-color: var(--clr-border); }
+        .btn-outline::before {
+            content: ''; position: absolute; inset: 0; background: var(--clr-gold);
+            transform: scaleY(0); transform-origin: bottom; transition: transform var(--transition-smooth); z-index: -1;
+        }
+        .btn-outline:hover, .btn-outline:focus-visible {
+            color: var(--clr-bg-dark); border-color: var(--clr-gold); outline: none;
+        }
+        .btn-outline:hover::before, .btn-outline:focus-visible::before { transform: scaleY(1); }
+
         /* ==========================================================================
-           6. HEADER & NAVIGATION
+           6. HEADER
            ========================================================================== */
         header {
-            position: fixed; top: 0; left: 0; width: 100%; z-index: 50;
-            padding: 1.5rem var(--container-padding);
-            transition: background 0.3s, padding 0.3s;
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 50; padding: 1.5rem var(--container-padding); transition: background 0.4s, padding 0.4s;
         }
         header.scrolled {
-            background: rgba(4, 13, 8, 0.9);
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            padding: 1rem var(--container-padding);
-            border-bottom: 1px solid var(--clr-border);
+            background: rgba(4, 13, 8, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            padding: 1rem var(--container-padding); border-bottom: 1px solid var(--clr-border);
         }
-        
-        .nav-wrapper {
-            display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto;
-        }
-        
-        .logo-text {
-            font-family: var(--font-serif); font-size: 1.5rem; color: var(--clr-gold);
-            letter-spacing: 2px; font-weight: 500;
-        }
-
+        .nav-wrapper { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; }
+        .logo-text { font-family: var(--font-serif); font-size: 1.5rem; color: var(--clr-gold); letter-spacing: 2px; }
         .nav-links { display: flex; gap: 2rem; align-items: center; }
-        .nav-link {
-            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--clr-bone);
-            transition: color 0.3s;
-        }
-        .nav-link:hover, .nav-link:focus-visible { color: var(--clr-gold); outline: none; }
+        .nav-link { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--clr-bone); transition: color 0.3s; }
+        .nav-link:hover { color: var(--clr-gold); }
 
-        @media (max-width: 768px) {
-            .nav-links .hide-mobile { display: none; }
-        }
+        @media (max-width: 768px) { .nav-links .hide-mobile { display: none; } }
 
         /* ==========================================================================
-           7. HERO SECTION
+           7. HERO SECTION (Cinematic ATMOSPHERE)
            ========================================================================== */
         .hero {
             height: 100vh; min-height: 600px; display: flex; align-items: center; justify-content: center;
             position: relative; overflow: hidden;
         }
         
-        .hero-bg {
-            position: absolute; inset: 0; z-index: 1;
-        }
+        .hero-bg { position: absolute; inset: 0; z-index: 1; overflow: hidden; }
         .hero-bg img {
-            width: 100%; height: 100%; object-fit: cover; opacity: 0.5;
-            transform: scale(1.05); /* Space for subtle parallax/zoom */
+            width: 100%; height: 100%; object-fit: cover; opacity: 0.6; transform: scale(1.1);
         }
+        
+        /* Warm Golden Light */
+        .hero-light {
+            position: absolute; inset: -50%; background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.15), transparent 60%);
+            animation: pulseLight 8s ease-in-out infinite alternate; z-index: 2; pointer-events: none;
+        }
+        @keyframes pulseLight { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.1); opacity: 1; } }
+
+        /* Smoke Layers */
+        .hero-smoke {
+            position: absolute; width: 200vw; height: 200vh;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03), transparent 60%);
+            animation: drift 30s infinite alternate linear; pointer-events: none; z-index: 3;
+        }
+        .hero-smoke-2 { animation-duration: 40s; animation-direction: alternate-reverse; opacity: 0.5; }
+        @keyframes drift { 0% { transform: translate(-10%, -10%) rotate(0deg); } 100% { transform: translate(5%, 5%) rotate(5deg); } }
+
+        /* Floating Spice Particles */
+        .spice-particles { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
+        .particle {
+            position: absolute; background: var(--clr-gold); border-radius: 50%; filter: blur(1px);
+            animation: floatUp var(--duration) linear infinite; opacity: 0;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; }
+            20% { opacity: var(--max-opacity); }
+            80% { opacity: var(--max-opacity); }
+            100% { transform: translateY(-10vh) scale(1.5) rotate(180deg); opacity: 0; }
+        }
+
         .hero-gradient {
-            position: absolute; inset: 0; z-index: 2;
-            background: linear-gradient(to bottom, rgba(4, 13, 8, 0.3) 0%, var(--clr-bg-dark) 100%);
+            position: absolute; inset: 0; z-index: 5;
+            background: linear-gradient(to bottom, rgba(4, 13, 8, 0.2) 0%, var(--clr-bg-dark) 100%);
         }
 
         .hero-content {
-            position: relative; z-index: 3; text-align: center; width: 100%; max-width: 900px;
-            padding: 0 var(--container-padding);
+            position: relative; z-index: 6; text-align: center; width: 100%; max-width: 900px; padding: 0 var(--container-padding);
         }
 
         .hero-logo-img {
             width: 120px; height: 120px; margin: 0 auto 2rem;
-            background: url('https://placehold.co/120x120/d4af37/040d08?text=GD') center/contain no-repeat; /* Placeholder for logo.png */
-            border-radius: 50%; border: 1px solid var(--clr-border);
-            display: flex; align-items: center; justify-content: center;
+            background: url('https://placehold.co/120x120/d4af37/040d08?text=GD') center/contain no-repeat; 
+            border-radius: 50%; border: 1px solid var(--clr-border); opacity: 0; transform: scale(0.9);
         }
 
-        .hero-actions {
-            display: flex; gap: 1rem; justify-content: center; margin-top: 3rem; flex-wrap: wrap;
-        }
+        .hero-actions { display: flex; gap: 1rem; justify-content: center; margin-top: 3rem; flex-wrap: wrap; }
+        .hero-actions .btn { opacity: 0; transform: translateY(20px); }
 
         /* ==========================================================================
-           8. AMBIENCE / ABOUT SECTION
+           8. AMBIENCE SECTION
            ========================================================================== */
-        .about-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
-        }
-        .about-image {
-            position: relative; height: 70vh; overflow: hidden; border-radius: 4px;
-        }
-        .about-image img {
-            position: absolute; top: -10%; left: 0; width: 100%; height: 120%; object-fit: cover;
-        }
-        .about-text p {
-            color: rgba(230, 228, 220, 0.7); margin-bottom: 2rem; font-size: 1.1rem;
-        }
-        @media (max-width: 992px) {
-            .about-grid { grid-template-columns: 1fr; gap: 3rem; }
-            .about-image { height: 50vh; order: -1; }
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .about-image { position: relative; height: 70vh; overflow: hidden; border-radius: 4px; }
+        .about-image img { position: absolute; top: -10%; left: 0; width: 100%; height: 120%; object-fit: cover; }
+        
+        /* Warm lantern glow behind image */
+        .lantern-glow {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 80%; height: 80%; background: var(--clr-gold); filter: blur(100px); opacity: 0.15; z-index: -1;
         }
 
+        .about-text p { color: rgba(230, 228, 220, 0.7); margin-bottom: 2rem; font-size: 1.1rem; }
+        @media (max-width: 992px) { .about-grid { grid-template-columns: 1fr; gap: 3rem; } .about-image { height: 50vh; order: -1; } }
+
         /* ==========================================================================
-           9. MENU PREVIEW SECTION
+           9. MENU PREVIEW & CARD ANIMATIONS
            ========================================================================== */
         .menu-section { background-color: var(--clr-bg-surface); }
-        .menu-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 4rem;
-        }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 4rem; }
         
         .menu-card {
-            background: var(--clr-bg-dark); border: 1px solid var(--clr-border);
-            border-radius: 4px; overflow: hidden; transition: transform 0.4s ease, box-shadow 0.4s ease;
-            position: relative;
+            background: var(--clr-bg-dark); position: relative; overflow: hidden;
+            transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
         }
-        .menu-card:hover {
-            transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-        }
+        .menu-card:hover { transform: translateY(-10px); }
         
-        .menu-card-img {
-            height: 240px; overflow: hidden; position: relative;
-        }
-        .menu-card-img img {
-            width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;
-        }
-        .menu-card:hover .menu-card-img img { transform: scale(1.08); }
+        /* Premium Gold Border Draw */
+        .menu-card .border-line { position: absolute; background: var(--clr-gold); transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1); z-index: 10; pointer-events: none; }
+        .menu-card .line-t { top: 0; left: 0; width: 100%; height: 1px; transform: scaleX(0); transform-origin: left; }
+        .menu-card .line-r { top: 0; right: 0; width: 1px; height: 100%; transform: scaleY(0); transform-origin: top; }
+        .menu-card .line-b { bottom: 0; right: 0; width: 100%; height: 1px; transform: scaleX(0); transform-origin: right; }
+        .menu-card .line-l { bottom: 0; left: 0; width: 1px; height: 100%; transform: scaleY(0); transform-origin: bottom; }
         
-        .badge {
-            position: absolute; top: 1rem; right: 1rem; background: var(--clr-gold); color: var(--clr-bg-dark);
-            font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; padding: 0.3rem 0.8rem;
-            font-weight: 600; z-index: 2;
+        .menu-card:hover .line-t, .menu-card:hover .line-b { transform: scaleX(1); }
+        .menu-card:hover .line-r, .menu-card:hover .line-l { transform: scaleY(1); }
+        
+        .menu-card-img { height: 260px; overflow: hidden; position: relative; }
+        .menu-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1); }
+        .menu-card:hover .menu-card-img img { transform: scale(1.1); }
+        
+        /* Steam Animation on Hot Dishes */
+        .steam-container { position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
+        .steam-puff {
+            position: absolute; bottom: -20px; width: 30px; height: 30px; background: rgba(255,255,255,0.2);
+            border-radius: 50%; filter: blur(12px); opacity: 0; animation: riseSteam var(--duration) ease-in infinite;
+        }
+        @keyframes riseSteam {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            40% { opacity: 0.5; }
+            100% { transform: translateY(-150px) scale(3) translateX(var(--drift)); opacity: 0; }
         }
 
-        .menu-card-content { padding: 2rem; }
+        /* Badge Shimmer */
+        .badge {
+            position: absolute; top: 1rem; right: 1rem; background: var(--clr-gold); color: var(--clr-bg-dark);
+            font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; padding: 0.4rem 1rem;
+            font-weight: 600; z-index: 5; overflow: hidden;
+        }
+        .badge::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent);
+            animation: shimmer 3s infinite;
+        }
+        @keyframes shimmer { 100% { left: 200%; } }
+
+        /* Ingredients Reveal */
+        .card-ingredients {
+            position: absolute; inset: 0; background: rgba(4, 13, 8, 0.85); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem;
+            opacity: 0; transform: translateY(20px); transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1); z-index: 4;
+        }
+        .menu-card:hover .card-ingredients { opacity: 1; transform: translateY(0); }
+        .ingredient-list { font-size: 0.85rem; color: var(--clr-bone); font-style: italic; font-family: var(--font-serif); }
+
+        .menu-card-content { padding: 2.5rem 2rem; position: relative; z-index: 3; background: var(--clr-bg-dark); border-top: 1px solid var(--clr-border); }
         .menu-category { font-size: 0.7rem; color: var(--clr-gold-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.5rem; display: block;}
         .menu-card-title { font-family: var(--font-serif); font-size: 1.5rem; color: var(--clr-gold); margin-bottom: 1rem; }
-        .menu-card-desc { font-size: 0.9rem; color: rgba(230, 228, 220, 0.6); line-height: 1.5; }
+        .menu-card-desc { font-size: 0.9rem; color: rgba(230, 228, 220, 0.6); line-height: 1.6; }
 
         /* ==========================================================================
            10. GALLERY SECTION
            ========================================================================== */
-        .gallery-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 4rem;
-        }
-        .gallery-item {
-            position: relative; height: 400px; overflow: hidden; border-radius: 4px;
-        }
+        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 4rem; }
+        .gallery-item { position: relative; height: 450px; overflow: hidden; border-radius: 4px; }
         .gallery-item:nth-child(2) { transform: translateY(3rem); }
-        .gallery-item img {
-            width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; filter: brightness(0.8);
-        }
-        .gallery-item:hover img { transform: scale(1.05); filter: brightness(1.1); }
-
+        .gallery-item img { width: 100%; height: 120%; object-fit: cover; top: -10%; position: absolute; }
+        
         @media (max-width: 992px) {
             .gallery-grid { grid-template-columns: repeat(2, 1fr); }
             .gallery-item:nth-child(2) { transform: translateY(0); }
@@ -339,134 +334,85 @@
         }
         @media (max-width: 600px) {
             .gallery-grid { grid-template-columns: 1fr; gap: 1rem; }
-            .gallery-item { height: 300px; }
+            .gallery-item { height: 350px; }
             .gallery-item:nth-child(3) { display: block; }
         }
 
         /* ==========================================================================
-           11. FOOTER & LOCATION
+           11. FOOTER
            ========================================================================== */
-        .footer {
-            background-color: var(--clr-bg-surface); padding-top: var(--section-padding); padding-bottom: 2rem;
-            border-top: 1px solid var(--clr-border);
-        }
-        .footer-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-bottom: 4rem;
-        }
+        .footer { background-color: var(--clr-bg-surface); padding-top: var(--section-padding); padding-bottom: 2rem; border-top: 1px solid var(--clr-border); }
+        .footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-bottom: 4rem; }
         .footer-col h3 { font-family: var(--font-serif); font-size: 2rem; color: var(--clr-gold); margin-bottom: 1.5rem; }
         .footer-col p, .footer-col a { color: rgba(230, 228, 220, 0.7); font-size: 1rem; margin-bottom: 0.5rem; display: block; transition: color 0.3s; }
-        .footer-col a:hover, .footer-col a:focus-visible { color: var(--clr-gold); outline: none; }
-        
-        .map-btn {
-            display: inline-flex; align-items: center; gap: 0.5rem; color: var(--clr-gold); border-bottom: 1px solid var(--clr-gold);
-            padding-bottom: 0.2rem; margin-top: 1rem; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;
-        }
-        
-        .footer-bottom {
-            text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 2rem;
-            font-size: 0.8rem; color: rgba(255,255,255,0.4);
-        }
-
-        @media (max-width: 768px) {
-            .footer-grid { grid-template-columns: 1fr; gap: 3rem; }
-            .footer { padding-bottom: 6rem; /* Space for mobile sticky bar */ }
-        }
+        .footer-col a:hover { color: var(--clr-gold); }
+        .map-btn { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--clr-gold); border-bottom: 1px solid var(--clr-gold); padding-bottom: 0.2rem; margin-top: 1rem; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; transition: opacity 0.3s; }
+        .map-btn:hover { opacity: 0.7; }
+        .footer-bottom { text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 2rem; font-size: 0.8rem; color: rgba(255,255,255,0.4); }
+        @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr; gap: 3rem; } .footer { padding-bottom: 6rem; } }
 
         /* ==========================================================================
            12. RESERVATION DRAWER
            ========================================================================== */
         .drawer-overlay {
-            position: fixed; inset: 0; background: var(--clr-overlay);
-            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            position: fixed; inset: 0; background: var(--clr-overlay); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             z-index: 100; opacity: 0; visibility: hidden; transition: var(--transition-smooth);
         }
         
         .drawer {
-            position: fixed; top: 0; right: 0; width: 100%; max-width: 500px; height: 100%;
+            position: fixed; top: 0; right: 0; width: 100%; max-width: 550px; height: 100%;
             background-color: var(--clr-bg-dark); border-left: 1px solid var(--clr-border);
-            z-index: 101; padding: 2rem; display: flex; flex-direction: column; overflow-y: auto;
-            transform: translateX(100%); transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
-            box-shadow: -10px 0 40px rgba(0,0,0,0.5);
+            z-index: 101; padding: 3rem; display: flex; flex-direction: column; overflow-y: auto;
+            transform: translateX(100%); transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+            box-shadow: -20px 0 50px rgba(0,0,0,0.5);
         }
         
-        /* Drawer Open State */
         body.drawer-open { overflow: hidden; }
         body.drawer-open .drawer-overlay { opacity: 1; visibility: visible; }
         body.drawer-open .drawer { transform: translateX(0); }
 
-        .drawer-header {
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;
-            padding-bottom: 1rem; border-bottom: 1px solid var(--clr-border);
-        }
-        
-        .btn-close {
-            background: none; border: none; color: var(--clr-bone); font-size: 2rem; line-height: 1;
-            cursor: pointer; opacity: 0.6; transition: opacity 0.3s, color 0.3s; padding: 0.5rem; margin: -0.5rem;
-        }
-        .btn-close:hover, .btn-close:focus-visible { opacity: 1; color: var(--clr-gold); outline: none;}
+        .drawer-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--clr-border); }
+        .btn-close { background: none; border: none; color: var(--clr-bone); font-size: 2.5rem; line-height: 0.8; opacity: 0.5; transition: opacity 0.3s, color 0.3s; }
+        .btn-close:hover { opacity: 1; color: var(--clr-gold); }
 
-        .res-form { display: flex; flex-direction: column; gap: 1.5rem; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        
-        .input-group { display: flex; flex-direction: column; gap: 0.5rem; }
-        .input-group label {
-            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--clr-gold-muted);
-        }
-        .input-group input, .input-group select {
-            background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2);
-            color: var(--clr-bone); font-family: var(--font-sans); font-size: 1rem; padding: 0.5rem 0;
-            outline: none; transition: border-color 0.3s; border-radius: 0;
-        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .input-group { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem; }
+        .input-group label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--clr-gold-muted); }
+        .input-group input, .input-group select { background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); color: var(--clr-bone); font-family: var(--font-sans); font-size: 1rem; padding: 0.5rem 0; outline: none; transition: border-color 0.3s; border-radius: 0; }
         .input-group input:focus, .input-group select:focus { border-bottom-color: var(--clr-gold); }
-        
-        /* Select styling */
-        .input-group select {
-            appearance: none; -webkit-appearance: none; cursor: pointer;
-            background-image: url('data:image/svg+xml;utf8,<svg fill="%23d4af37" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
-            background-repeat: no-repeat; background-position: right center;
-        }
+        .input-group select { appearance: none; -webkit-appearance: none; background-image: url('data:image/svg+xml;utf8,<svg fill="%23d4af37" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); background-repeat: no-repeat; background-position: right center; }
         .input-group select option { background: var(--clr-bg-surface); color: var(--clr-bone); }
-
-        /* Dark mode calendar icon fix */
-        ::-webkit-calendar-picker-indicator {
-            filter: invert(70%) sepia(40%) saturate(400%) hue-rotate(5deg) brightness(90%) contrast(90%);
-            cursor: pointer;
-        }
+        ::-webkit-calendar-picker-indicator { filter: invert(70%) sepia(40%) saturate(400%) hue-rotate(5deg) brightness(90%) contrast(90%); cursor: pointer; }
 
         .drawer-footer { margin-top: auto; padding-top: 2rem; }
-        .drawer-footer .btn { width: 100%; }
-        
-        @media (max-width: 500px) {
-            .form-row { grid-template-columns: 1fr; gap: 1.5rem; }
-        }
+        .drawer-footer .btn { width: 100%; padding: 1.5rem; }
+
+        /* Success State Micro-animation */
+        .success-state { display: none; text-align: center; flex-direction: column; justify-content: center; height: 100%; opacity: 0; transform: scale(0.9); }
+        .success-icon { font-size: 4rem; color: var(--clr-gold); margin-bottom: 1rem; }
+        .success-state h3 { font-family: var(--font-serif); font-size: 2rem; color: var(--clr-gold); margin-bottom: 0.5rem; }
+
+        @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; gap: 0; } .drawer { padding: 2rem; } }
 
         /* ==========================================================================
            13. MOBILE STICKY ACTION BAR
            ========================================================================== */
         .mobile-action-bar {
             display: none; position: fixed; bottom: 0; left: 0; width: 100%; z-index: 90;
-            background: rgba(10, 31, 20, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            border-top: 1px solid var(--clr-border); padding: 0.8rem 1rem;
-            grid-template-columns: repeat(3, 1fr); gap: 0.5rem;
+            background: rgba(4, 13, 8, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid var(--clr-border); padding: 0.8rem 1rem; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;
         }
-        
         .mobile-btn {
             display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.3rem;
             background: transparent; border: none; color: var(--clr-bone); font-family: var(--font-sans);
             font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer;
         }
-        .mobile-btn svg { width: 20px; height: 20px; fill: var(--clr-gold); }
+        .mobile-btn svg { width: 20px; height: 20px; fill: var(--clr-gold); stroke: var(--clr-gold); }
         .mobile-btn.highlight { color: var(--clr-gold); }
-        
-        @media (max-width: 768px) {
-            .mobile-action-bar { display: grid; }
-        }
+        @media (max-width: 768px) { .mobile-action-bar { display: grid; } }
 
-        /* ==========================================================================
-           14. GSAP ANIMATION CLASSES
-           ========================================================================== */
-        .gs-fade-up { opacity: 0; transform: translateY(40px); }
-        .gs-clip-reveal { clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); } /* Reveals to 100% 100% */
+        /* GSAP specific classes */
+        .drawer-item { opacity: 0; transform: translateY(20px); }
     </style>
 </head>
 <body>
@@ -475,7 +421,7 @@
     <div class="cursor-outline" aria-hidden="true"></div>
 
     <div class="preloader" id="preloader">
-        <div class="preloader-brand">GAZEBO</div>
+        <div class="preloader-brand"><span>GAZEBO</span></div>
         <div class="loader-line-wrapper">
             <div class="loader-line" id="loaderLine"></div>
         </div>
@@ -496,32 +442,47 @@
     <main>
         <section class="hero" id="home">
             <div class="hero-bg">
-                <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1974&auto=format&fit=crop" alt="Gazebo Dhaba Ambience" id="heroImg">
+                <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1974&auto=format&fit=crop" alt="Gazebo Dhaba Ambience" class="hero-img-zoom">
             </div>
+            
+            <div class="hero-light"></div>
+            <div class="hero-smoke"></div>
+            <div class="hero-smoke hero-smoke-2"></div>
+            <div class="spice-particles" id="spiceParticles"></div>
+            
             <div class="hero-gradient"></div>
             
             <div class="hero-content">
-                <div class="hero-logo-img gs-fade-up"></div>
-                <span class="subheading gs-fade-up">Navi Mumbai's Most Exclusive</span>
-                <h1 class="heading-xl gs-fade-up">The Royal<br><span class="text-gold">Indian Journey.</span></h1>
+                <div class="hero-logo-img"></div>
+                <span class="subheading reveal-mask"><span class="hero-sub">Navi Mumbai's Most Exclusive</span></span>
+                <h1 class="heading-xl">
+                    <span class="reveal-mask"><span class="hero-title-line">The Royal</span></span><br>
+                    <span class="reveal-mask"><span class="hero-title-line text-gold">Indian Journey.</span></span>
+                </h1>
                 
-                <div class="hero-actions gs-fade-up">
-                    <button class="btn btn-gold interactive" onclick="toggleDrawer()">Reserve Table</button>
-                    <a href="#menu" class="btn btn-outline interactive">View Menu</a>
+                <div class="hero-actions">
+                    <button class="btn btn-gold interactive hero-cta" onclick="toggleDrawer()">Reserve Table</button>
+                    <a href="#menu" class="btn btn-outline interactive hero-cta">View Menu</a>
                 </div>
             </div>
         </section>
 
         <section class="section container" id="about">
             <div class="about-grid">
-                <div class="about-text gs-fade-up">
-                    <span class="subheading">The Atmosphere</span>
-                    <h2 class="heading-lg">A Canvas of<br>Light & Smoke</h2>
-                    <p>Designed for scale and intimacy. Underneath a canopy of ambient lights, the Gazebo Dhaba provides a cinematic backdrop for celebrations, intimate dinners, and unforgettable evenings.</p>
-                    <p>We blend the rustic charm of a traditional Dhaba with the uncompromising quality and service of fine dining.</p>
-                    <a href="#gallery" class="btn btn-outline interactive" style="margin-top: 1rem;">Explore Gallery</a>
+                <div class="about-text">
+                    <span class="subheading reveal-mask"><span class="st-reveal">The Atmosphere</span></span>
+                    <h2 class="heading-lg">
+                        <span class="reveal-mask"><span class="st-reveal">A Canvas of</span></span><br>
+                        <span class="reveal-mask"><span class="st-reveal text-gold">Light & Smoke</span></span>
+                    </h2>
+                    <div class="st-fade">
+                        <p>Designed for scale and intimacy. Underneath a canopy of ambient lights, the Gazebo Dhaba provides a cinematic backdrop for celebrations, intimate dinners, and unforgettable evenings.</p>
+                        <p>We blend the rustic charm of a traditional Dhaba with the uncompromising quality and service of fine dining.</p>
+                        <a href="#gallery" class="btn btn-outline interactive" style="margin-top: 1rem;">Explore Gallery</a>
+                    </div>
                 </div>
-                <div class="about-image">
+                <div class="about-image clip-reveal">
+                    <div class="lantern-glow"></div>
                     <img src="https://images.unsplash.com/photo-1578474846511-04ba529f0b88?q=80&w=1974&auto=format&fit=crop" alt="Restaurant Interior" class="gs-parallax" loading="lazy">
                 </div>
             </div>
@@ -529,16 +490,23 @@
 
         <section class="section menu-section" id="menu">
             <div class="container">
-                <div class="text-center gs-fade-up">
-                    <span class="subheading">Culinary Excellence</span>
-                    <h2 class="heading-lg">Signature Dishes</h2>
+                <div class="text-center">
+                    <span class="subheading reveal-mask"><span class="st-reveal">Culinary Excellence</span></span>
+                    <h2 class="heading-lg reveal-mask"><span class="st-reveal">Signature Dishes</span></h2>
                 </div>
                 
                 <div class="menu-grid">
-                    <article class="menu-card interactive gs-fade-up">
+                    <article class="menu-card interactive st-card">
+                        <div class="border-line line-t"></div><div class="border-line line-r"></div>
+                        <div class="border-line line-b"></div><div class="border-line line-l"></div>
+                        
                         <div class="badge">Chef's Special</div>
                         <div class="menu-card-img">
+                            <div class="card-ingredients">
+                                <span class="ingredient-list">Saffron • Moroccan Spices • Fresh Catch • Smoked Butter</span>
+                            </div>
                             <img src="https://images.unsplash.com/photo-1544025162-8315ea070d5b?q=80&w=2070&auto=format&fit=crop" alt="Moroccan Seafood Sizzler" loading="lazy">
+                            <div class="steam-container" id="steam1"></div>
                         </div>
                         <div class="menu-card-content">
                             <span class="menu-category">Sizzlers</span>
@@ -547,10 +515,17 @@
                         </div>
                     </article>
 
-                    <article class="menu-card interactive gs-fade-up">
+                    <article class="menu-card interactive st-card">
+                        <div class="border-line line-t"></div><div class="border-line line-r"></div>
+                        <div class="border-line line-b"></div><div class="border-line line-l"></div>
+                        
                         <div class="badge">Popular</div>
                         <div class="menu-card-img">
+                            <div class="card-ingredients">
+                                <span class="ingredient-list">Black Lentils • Churned Butter • Tomato Puree • Fenugreek</span>
+                            </div>
                             <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?q=80&w=2000&auto=format&fit=crop" alt="Dal Makhani Reserve" loading="lazy">
+                            <div class="steam-container" id="steam2"></div>
                         </div>
                         <div class="menu-card-content">
                             <span class="menu-category">Main Course</span>
@@ -559,14 +534,21 @@
                         </div>
                     </article>
 
-                    <article class="menu-card interactive gs-fade-up">
+                    <article class="menu-card interactive st-card">
+                        <div class="border-line line-t"></div><div class="border-line line-r"></div>
+                        <div class="border-line line-b"></div><div class="border-line line-l"></div>
+                        
                         <div class="menu-card-img">
+                            <div class="card-ingredients">
+                                <span class="ingredient-list">Premium Cuts • Saffron • Hung Curd • Tandoor Char</span>
+                            </div>
                             <img src="https://images.unsplash.com/photo-1599487405702-3e33fc2909f2?q=80&w=2000&auto=format&fit=crop" alt="Royal Tandoori Platter" loading="lazy">
+                            <div class="steam-container" id="steam3"></div>
                         </div>
                         <div class="menu-card-content">
                             <span class="menu-category">Appetizers</span>
                             <h3 class="menu-card-title">Royal Tandoori Platter</h3>
-                            <p class="menu-card-desc">A curated selection of premium cuts, marinated in saffron and yogurt, char-grilled to absolute perfection.</p>
+                            <p class="menu-card-desc">A curated selection of premium cuts, marinated in saffron and yogurt, char-grilled to absolute perfection in traditional clay ovens.</p>
                         </div>
                     </article>
                 </div>
@@ -574,37 +556,37 @@
         </section>
 
         <section class="section container" id="gallery">
-            <div class="text-center gs-fade-up">
-                <span class="subheading">Visual Journey</span>
-                <h2 class="heading-lg">The Experience</h2>
+            <div class="text-center">
+                <span class="subheading reveal-mask"><span class="st-reveal">Visual Journey</span></span>
+                <h2 class="heading-lg reveal-mask"><span class="st-reveal">The Experience</span></h2>
             </div>
             
             <div class="gallery-grid">
-                <div class="gallery-item gs-fade-up">
-                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop" alt="Restaurant Ambience" loading="lazy">
+                <div class="gallery-item clip-reveal">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop" alt="Restaurant Ambience" class="gs-parallax-gallery" loading="lazy">
                 </div>
-                <div class="gallery-item gs-fade-up">
-                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1974&auto=format&fit=crop" alt="Fine Dining Setup" loading="lazy">
+                <div class="gallery-item clip-reveal">
+                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1974&auto=format&fit=crop" alt="Fine Dining Setup" class="gs-parallax-gallery" loading="lazy">
                 </div>
-                <div class="gallery-item gs-fade-up">
-                    <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1974&auto=format&fit=crop" alt="Night View" loading="lazy">
+                <div class="gallery-item clip-reveal">
+                    <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1974&auto=format&fit=crop" alt="Night View" class="gs-parallax-gallery" loading="lazy">
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="footer">
+    <footer class="footer st-footer">
         <div class="container">
             <div class="footer-grid">
-                <div class="footer-col gs-fade-up">
+                <div class="footer-col">
                     <h3>Gazebo Dhaba</h3>
                     <p>Experience the perfect blend of traditional flavors and luxury dining in the heart of Navi Mumbai.</p>
-                    <a href="https://maps.app.goo.gl/..." target="_blank" rel="noopener noreferrer" class="map-btn interactive">
+                    <a href="https://maps.google.com/?q=Gazebo+Dhaba+Navi+Mumbai" target="_blank" rel="noopener noreferrer" class="map-btn interactive">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                         Open in Google Maps
                     </a>
                 </div>
-                <div class="footer-col gs-fade-up">
+                <div class="footer-col">
                     <span class="subheading">Location & Contact</span>
                     <p>7/2/ A/1, Panvel, Village, Mumbra-Panvel Hwy</p>
                     <p>near Reliance Petrol Pump, Rohinjan</p>
@@ -615,45 +597,46 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 Gazebo Dhaba. All rights reserved.</p>
+                <p>© 2026 Gazebo Dhaba. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <div class="drawer-overlay" id="drawerOverlay" aria-hidden="true" onclick="toggleDrawer()"></div>
     <aside class="drawer" id="reservationDrawer" role="dialog" aria-labelledby="drawerTitle" aria-hidden="true">
+        
         <div class="drawer-header">
             <div>
                 <h2 id="drawerTitle" class="heading-md text-gold">Reservations</h2>
                 <span class="subheading" style="margin-bottom:0;">Gazebo Dhaba VIP</span>
             </div>
-            <button class="btn-close interactive" onclick="toggleDrawer()" aria-label="Close Reservation Drawer">&times;</button>
+            <button class="btn-close interactive" onclick="toggleDrawer()" aria-label="Close Reservation Drawer">×</button>
         </div>
         
         <form class="res-form" id="resForm" onsubmit="submitReservation(event)">
-            <div class="input-group">
+            <div class="input-group drawer-item">
                 <label for="resName">Full Name</label>
                 <input type="text" id="resName" name="name" required placeholder="e.g. Rahul Sharma" class="interactive">
             </div>
             
-            <div class="input-group">
+            <div class="input-group drawer-item">
                 <label for="resPhone">Phone Number</label>
                 <input type="tel" id="resPhone" name="phone" required placeholder="+91" class="interactive">
             </div>
             
             <div class="form-row">
-                <div class="input-group">
+                <div class="input-group drawer-item">
                     <label for="resDate">Date</label>
                     <input type="date" id="resDate" name="date" required class="interactive">
                 </div>
-                <div class="input-group">
+                <div class="input-group drawer-item">
                     <label for="resTime">Time</label>
                     <input type="time" id="resTime" name="time" required class="interactive">
                 </div>
             </div>
             
             <div class="form-row">
-                <div class="input-group">
+                <div class="input-group drawer-item">
                     <label for="resGuests">Guests</label>
                     <select id="resGuests" name="guests" required class="interactive">
                         <option value="" disabled selected>Select</option>
@@ -663,7 +646,7 @@
                         <option value="8+">8+ VIP Table</option>
                     </select>
                 </div>
-                <div class="input-group">
+                <div class="input-group drawer-item">
                     <label for="resOccasion">Occasion</label>
                     <select id="resOccasion" name="occasion" class="interactive">
                         <option value="Standard Dining" selected>Standard Dining</option>
@@ -674,15 +657,22 @@
                 </div>
             </div>
             
-            <div class="drawer-footer">
+            <div class="drawer-footer drawer-item">
                 <button type="submit" class="btn btn-gold interactive">Confirm via WhatsApp</button>
             </div>
         </form>
+
+        <div class="success-state" id="successState">
+            <div class="success-icon">✧</div>
+            <h3>Request Prepared</h3>
+            <p style="color: rgba(230,228,220,0.7);">Redirecting to WhatsApp to confirm your VIP experience...</p>
+        </div>
+
     </aside>
 
     <div class="mobile-action-bar">
         <a href="tel:+918268266644" class="mobile-btn">
-            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
             Call
         </a>
         <button class="mobile-btn highlight" onclick="toggleDrawer()">
@@ -690,124 +680,195 @@
             Reserve
         </button>
         <a href="https://wa.me/918268266644" target="_blank" rel="noopener noreferrer" class="mobile-btn">
-            <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
             WhatsApp
         </a>
     </div>
 
     <script>
-        // --- 1. Custom Cursor Logic ---
-        // Only initializes if touch/pointer supports hover (prevents mobile glitch)
+        gsap.registerPlugin(ScrollTrigger);
+
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const isTouchDevice = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
-        
+
+        // --- 1. Custom Cursor Logic (Desktop Only) ---
         if (!isTouchDevice) {
             const cursorDot = document.querySelector('.cursor-dot');
             const cursorOutline = document.querySelector('.cursor-outline');
-            
-            // GSAP quickTo for smooth performance
             const xTo = gsap.quickTo(cursorOutline, "x", {duration: 0.15, ease: "power3"});
             const yTo = gsap.quickTo(cursorOutline, "y", {duration: 0.15, ease: "power3"});
             
             window.addEventListener("mousemove", (e) => {
                 gsap.set(cursorDot, {x: e.clientX, y: e.clientY});
-                xTo(e.clientX);
-                yTo(e.clientY);
+                xTo(e.clientX); yTo(e.clientY);
             });
 
-            // Hover states for interactive elements
-            const interactives = document.querySelectorAll('.interactive, button, a, input, select');
-            interactives.forEach(el => {
+            document.querySelectorAll('.interactive, button, a, input, select').forEach(el => {
                 el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
                 el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
             });
         }
 
-        // --- 2. Preloader & Hero Initial Reveal ---
+        // --- 2. Lightweight Particle Systems (Steam & Spice) ---
+        if (!prefersReducedMotion) {
+            // Spice Particles (Hero)
+            if(window.innerWidth > 768) {
+                const particleContainer = document.getElementById('spiceParticles');
+                for(let i = 0; i < 30; i++) {
+                    let p = document.createElement('div');
+                    p.className = 'particle';
+                    p.style.left = Math.random() * 100 + 'vw';
+                    p.style.setProperty('--duration', (Math.random() * 10 + 10) + 's');
+                    p.style.setProperty('--max-opacity', Math.random() * 0.4 + 0.2);
+                    p.style.animationDelay = (Math.random() * 10) + 's';
+                    particleContainer.appendChild(p);
+                }
+            }
+
+            // Steam Particles (Food Cards)
+            const createSteam = (containerId) => {
+                const container = document.getElementById(containerId);
+                for(let i = 0; i < 5; i++) {
+                    let puff = document.createElement('div');
+                    puff.className = 'steam-puff';
+                    puff.style.left = (Math.random() * 60 + 20) + '%';
+                    puff.style.setProperty('--duration', (Math.random() * 2 + 2.5) + 's');
+                    puff.style.setProperty('--drift', (Math.random() * 40 - 20) + 'px');
+                    puff.style.animationDelay = (Math.random() * 2) + 's';
+                    container.appendChild(puff);
+                }
+            };
+            createSteam('steam1'); createSteam('steam2'); createSteam('steam3');
+        }
+
+        // --- 3. Preloader & Hero Animations ---
         window.addEventListener('load', () => {
+            if (prefersReducedMotion) {
+                document.getElementById('preloader').style.display = 'none';
+                gsap.set('.hero-logo-img', { opacity: 1, scale: 1 });
+                gsap.set('.hero-sub, .hero-title-line', { y: '0%' });
+                gsap.set('.hero-cta', { y: 0, opacity: 1 });
+                return;
+            }
+
             const tl = gsap.timeline();
             
-            // Fade in logo text
-            tl.to('.preloader-brand', { opacity: 1, duration: 0.5, ease: "power2.out" })
-              // Animate line
-              .to('.loader-line', { width: "100%", duration: 0.8, ease: "power3.inOut" })
-              // Slide preloader up
-              .to('.preloader', { yPercent: -100, duration: 0.8, ease: "power4.inOut" }, "+=0.2")
-              // Reveal Hero Content
-              .to('.hero-bg img', { scale: 1, duration: 1.5, ease: "power2.out" }, "-=0.5")
-              .to('.gs-fade-up', { y: 0, opacity: 1, duration: 1, stagger: 0.15, ease: "power3.out" }, "-=1");
+            // Fast Preloader
+            tl.to('.preloader-brand span', { y: '0%', opacity: 1, duration: 0.5, ease: "power3.out" })
+              .to('.loader-line', { width: "100%", duration: 0.6, ease: "power2.inOut" })
+              .to('#preloader', { yPercent: -100, duration: 0.8, ease: "power4.inOut" }, "+=0.1")
+              
+              // Cinematic Hero Reveal
+              .to('.hero-img-zoom', { scale: 1, duration: 2, ease: "power2.out" }, "-=0.6")
+              .to('.hero-logo-img', { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, "-=1.5")
+              .to('.hero-sub', { y: '0%', duration: 0.6, ease: "power3.out" }, "-=1.2")
+              .to('.hero-title-line', { y: '0%', duration: 0.8, stagger: 0.15, ease: "power4.out" }, "-=1")
+              .to('.hero-cta', { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: "power2.out" }, "-=0.4");
         });
 
-        // --- 3. Scroll & GSAP Animations ---
-        gsap.registerPlugin(ScrollTrigger);
-        
-        // Header blur on scroll
+        // --- 4. Scroll GSAP Animations ---
         const header = document.getElementById('header');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) header.classList.add('scrolled');
             else header.classList.remove('scrolled');
         });
 
-        // Prevent animations from running on devices that prefer reduced motion
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        
         if (!prefersReducedMotion) {
-            // General Fade Up Elements
-            gsap.utils.toArray('.section .gs-fade-up').forEach(element => {
-                gsap.to(element, {
-                    y: 0, opacity: 1, duration: 0.8, ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: element,
-                        start: "top 85%", // Triggers when element is 85% into viewport
-                        toggleActions: "play none none none"
-                    }
+            // Text Mask Reveals
+            gsap.utils.toArray('.st-reveal').forEach(el => {
+                gsap.to(el, {
+                    y: '0%', duration: 0.8, ease: "power3.out",
+                    scrollTrigger: { trigger: el, start: "top 90%" }
                 });
             });
 
-            // Subtle Image Parallax for About section
-            gsap.to('.gs-parallax', {
-                yPercent: 15, ease: "none",
-                scrollTrigger: {
-                    trigger: ".about-image",
-                    start: "top bottom",
-                    end: "bottom top",
-                    scrub: true
-                }
+            // Standard Fades
+            gsap.fromTo('.st-fade', { opacity: 0, y: 30 }, {
+                opacity: 1, y: 0, duration: 0.8, ease: "power2.out",
+                scrollTrigger: { trigger: '.st-fade', start: "top 85%" }
+            });
+
+            // Clip Path Image Reveal
+            gsap.utils.toArray('.clip-reveal').forEach(el => {
+                gsap.to(el, {
+                    clipPath: 'inset(0 0 0 0)', duration: 1.2, ease: "power4.out",
+                    scrollTrigger: { trigger: el, start: "top 85%" }
+                });
+            });
+
+            // Menu Cards Stagger
+            ScrollTrigger.batch(".st-card", {
+                start: "top 85%",
+                onEnter: batch => gsap.fromTo(batch, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: "power3.out" })
+            });
+
+            // Gallery Parallax
+            if(window.innerWidth > 768) {
+                gsap.utils.toArray('.gs-parallax').forEach(img => {
+                    gsap.to(img, {
+                        yPercent: 15, ease: "none",
+                        scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: true }
+                    });
+                });
+                gsap.utils.toArray('.gs-parallax-gallery').forEach(img => {
+                    gsap.to(img, {
+                        yPercent: 20, ease: "none",
+                        scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: true }
+                    });
+                });
+            }
+
+            // Footer Fade
+            gsap.fromTo('.st-footer', { opacity: 0 }, {
+                opacity: 1, duration: 1,
+                scrollTrigger: { trigger: '.st-footer', start: "top 95%" }
             });
         } else {
-            // Set end states immediately if motion is reduced
-            gsap.set('.gs-fade-up', { y: 0, opacity: 1 });
+            // Ensure elements are visible if motion is reduced
+            gsap.set('.st-reveal', { y: '0%' });
+            gsap.set('.clip-reveal', { clipPath: 'inset(0 0 0 0)' });
         }
 
-        // --- 4. Drawer Logic ---
+        // --- 5. Drawer & WhatsApp Logic ---
         const drawer = document.getElementById('reservationDrawer');
         const drawerOverlay = document.getElementById('drawerOverlay');
         const openBtn = document.querySelector('[aria-controls="reservationDrawer"]');
+        const formItems = gsap.utils.toArray('.drawer-item');
         
         function toggleDrawer() {
             const isOpen = document.body.classList.contains('drawer-open');
+            
+            // Reset success state if reopening
+            if(!isOpen && document.getElementById('resForm').style.display === 'none') {
+                document.getElementById('resForm').style.display = 'flex';
+                document.getElementById('successState').style.display = 'none';
+            }
+
             if (isOpen) {
                 document.body.classList.remove('drawer-open');
                 drawer.setAttribute('aria-hidden', 'true');
                 drawerOverlay.setAttribute('aria-hidden', 'true');
-                openBtn.setAttribute('aria-expanded', 'false');
+                openBtn?.setAttribute('aria-expanded', 'false');
+                gsap.set(formItems, { y: 20, opacity: 0 }); // Reset fields
             } else {
                 document.body.classList.add('drawer-open');
                 drawer.setAttribute('aria-hidden', 'false');
                 drawerOverlay.setAttribute('aria-hidden', 'false');
-                openBtn.setAttribute('aria-expanded', 'true');
-                // Set focus inside drawer for accessibility
-                setTimeout(() => document.getElementById('resName').focus(), 600);
+                openBtn?.setAttribute('aria-expanded', 'true');
+                
+                // Form Stagger In
+                if(!prefersReducedMotion) {
+                    gsap.to(formItems, { y: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: "power2.out", delay: 0.2 });
+                } else {
+                    gsap.set(formItems, { y: 0, opacity: 1 });
+                }
             }
         }
 
-        // Close drawer on Escape key
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && document.body.classList.contains('drawer-open')) {
-                toggleDrawer();
-            }
+            if (e.key === 'Escape' && document.body.classList.contains('drawer-open')) toggleDrawer();
         });
 
-        // --- 5. WhatsApp Form Submission Logic ---
         function submitReservation(e) {
             e.preventDefault();
             
@@ -818,22 +879,28 @@
             const guests = document.getElementById('resGuests').value;
             const occasion = document.getElementById('resOccasion').value;
 
-            // Format date for better readability (Optional)
             const dateObj = new Date(date);
             const formattedDate = dateObj.toLocaleDateString('en-IN', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
 
             const text = `Hello Gazebo Dhaba! I would like to request a VIP table reservation.%0A%0A*Name:* ${name}%0A*Phone:* ${phone}%0A*Date:* ${formattedDate}%0A*Time:* ${time}%0A*Guests:* ${guests}%0A*Occasion:* ${occasion}%0A%0APlease confirm my booking.`;
-            
             const whatsappUrl = `https://wa.me/918268266644?text=${text}`;
             
-            // Open WhatsApp in new tab
-            window.open(whatsappUrl, '_blank');
+            // Micro-animation for success state
+            const form = document.getElementById('resForm');
+            const success = document.getElementById('successState');
             
-            // Close drawer after submission
-            toggleDrawer();
-            
-            // Reset form
-            e.target.reset();
+            gsap.to(form, { opacity: 0, duration: 0.3, onComplete: () => {
+                form.style.display = 'none';
+                success.style.display = 'flex';
+                gsap.to(success, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.5)" });
+                
+                // Trigger WhatsApp and close
+                setTimeout(() => {
+                    window.open(whatsappUrl, '_blank');
+                    toggleDrawer();
+                    form.reset();
+                }, 1500);
+            }});
         }
     </script>
 </body>
