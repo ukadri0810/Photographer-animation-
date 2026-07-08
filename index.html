@@ -30,35 +30,25 @@
 
         /* --- CINEMATIC FILM GRAIN --- */
         .noise-overlay {
-            position: fixed; inset: 0; z-index: 9999;
-            pointer-events: none; opacity: 0.04;
+            position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.04;
             background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
         }
 
-        /* --- HERO & AMBIENT VIDEO BACKGROUND --- */
+        /* --- 1. HERO SECTION --- */
         .hero {
             position: relative; height: 100vh; width: 100%;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             overflow: hidden;
         }
 
-        /* The Full-Bleed Video Background */
         .ambient-video {
-            position: absolute;
-            top: 50%; left: 50%;
-            min-width: 100%; min-height: 100%;
-            width: auto; height: auto;
-            transform: translateX(-50%) translateY(-50%);
-            z-index: 0;
-            object-fit: cover;
-            /* This opacity pushes the video into the background, making it feel premium */
-            opacity: 0.35; 
+            position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%;
+            transform: translateX(-50%) translateY(-50%); z-index: 0; object-fit: cover; opacity: 0.4; 
         }
 
-        /* An extra gradient mask to ensure text readability at the center */
         .video-mask {
             position: absolute; inset: 0;
-            background: radial-gradient(circle at center, rgba(4, 13, 8, 0.3) 0%, rgba(4, 13, 8, 0.9) 100%);
+            background: radial-gradient(circle at center, rgba(4, 13, 8, 0.2) 0%, rgba(4, 13, 8, 0.95) 100%);
             z-index: 1;
         }
 
@@ -74,99 +64,114 @@
 
         .hero h1 {
             font-family: 'Playfair Display', serif; font-size: 6vw; font-weight: 400; line-height: 1.1; margin-bottom: 2.5rem;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); /* Setup for GSAP reveal */
         }
         .hero h1 span { color: var(--gold-metallic); }
 
-        /* --- PREMIUM MAGNETIC BUTTON --- */
         .btn-primary {
-            padding: 1.2rem 3.5rem;
-            background: transparent; color: var(--gold-metallic);
-            border: 1px solid var(--border-faint);
-            font-family: 'Inter', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px;
+            padding: 1.2rem 3.5rem; background: transparent; color: var(--gold-metallic);
+            border: 1px solid var(--border-faint); font-family: 'Inter', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px;
             cursor: pointer; transition: all 0.4s ease; position: relative; overflow: hidden; backdrop-filter: blur(5px);
         }
-
         .btn-primary::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--gold-metallic); transform: scaleY(0); transform-origin: bottom; transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1); z-index: -1;
         }
-
         .btn-primary:hover { color: var(--emerald-black); border-color: var(--gold-metallic); }
         .btn-primary:hover::before { transform: scaleY(1); }
 
-        /* --- THE VIP CONCIERGE DRAWER (Hardware Accelerated 60fps) --- */
-        .drawer-overlay {
-            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            z-index: 99; opacity: 0; visibility: hidden; transition: all 0.6s ease;
+        /* --- FLOATING INFO BAR --- */
+        .hero-info-bar {
+            position: absolute; bottom: 0; left: 0; width: 100%; z-index: 5;
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            border-top: 1px solid var(--border-faint);
+            background: rgba(4, 13, 8, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
         }
 
+        .info-block {
+            padding: 2rem; border-right: 1px solid var(--border-faint); text-align: left;
+        }
+        .info-block:last-child { border-right: none; }
+
+        .info-label {
+            display: block; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 3px;
+            color: var(--gold-muted); margin-bottom: 0.8rem;
+        }
+
+        .info-data {
+            font-size: 0.85rem; line-height: 1.6; color: var(--bone);
+        }
+
+        /* --- 2. EDITORIAL GALLERY SECTION --- */
+        .gallery-section {
+            padding: 10vw 5vw; background-color: var(--emerald-black); position: relative; z-index: 10;
+        }
+
+        .grid-layout {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 8vw; align-items: center; margin-bottom: 15vh;
+        }
+        .grid-layout.reverse { grid-template-columns: 1.2fr 0.8fr; }
+        .grid-layout.reverse .text-block { order: -1; }
+
+        .text-block h2 {
+            font-family: 'Playfair Display', serif; font-size: 3.5vw; font-weight: 400; line-height: 1.2; margin-bottom: 1.5rem; color: var(--gold-metallic);
+        }
+        .text-block p {
+            font-size: 0.95rem; line-height: 1.8; color: rgba(230, 228, 220, 0.7);
+        }
+
+        .image-wrapper {
+            position: relative; width: 100%; height: 75vh; overflow: hidden;
+            clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%); /* Starts hidden for GSAP scroll */
+        }
+        .grid-layout.reverse .image-wrapper { height: 60vh; }
+
+        .image-wrapper img {
+            width: 100%; height: 120%; object-fit: cover; position: absolute; top: -10%;
+        }
+
+        /* --- VIP CONCIERGE DRAWER --- */
+        .drawer-overlay {
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); z-index: 99; opacity: 0; visibility: hidden; transition: all 0.6s ease;
+        }
         .booking-drawer {
             position: fixed; top: 0; right: 0; width: 550px; height: 100%;
             background: var(--emerald-black); border-left: 1px solid var(--border-faint);
             z-index: 100; padding: 4rem; display: flex; flex-direction: column; overflow-y: auto;
-            
-            /* The Fix: Moving from 'right' to GPU-accelerated 'transform' */
-            transform: translateX(100%);
-            transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
-            
-            box-shadow: -20px 0 50px rgba(0,0,0,0.5);
+            transform: translateX(100%); transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
         }
-
-        /* Sliding the drawer in smoothly */
         .drawer-open .booking-drawer { transform: translateX(0); }
         .drawer-open .drawer-overlay { opacity: 1; visibility: visible; }
-
-        .drawer-header {
-            display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3rem;
-        }
-
+        
+        .drawer-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3rem; }
         .drawer-header h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 400; color: var(--bone); line-height: 1; margin-bottom: 0.5rem;}
         .drawer-header p { font-size: 0.8rem; color: var(--gold-muted); letter-spacing: 1px; text-transform: uppercase; }
         .close-btn { background: none; border: none; color: var(--bone); font-size: 2.5rem; cursor: pointer; line-height: 0.8; opacity: 0.5; transition: opacity 0.3s; }
         .close-btn:hover { opacity: 1; color: var(--gold-metallic); }
 
-        /* Premium Form Grid */
-        .form-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;
-        }
-        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
         .full-width { grid-column: 1 / -1; }
-
         .input-group { position: relative; opacity: 0; transform: translateY(20px); }
-
-        .input-group label {
-            display: block; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px;
-            color: var(--gold-muted); margin-bottom: 0.8rem;
-        }
-
+        .input-group label { display: block; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold-muted); margin-bottom: 0.8rem; }
         .input-group input, .input-group select {
-            width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--border-faint);
-            color: var(--bone); padding: 0.5rem 0; font-family: 'Inter', sans-serif; font-size: 1rem;
-            outline: none; transition: all 0.3s ease; border-radius: 0;
+            width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--border-faint); color: var(--bone); padding: 0.5rem 0; font-family: 'Inter', sans-serif; font-size: 1rem; outline: none; transition: all 0.3s ease; border-radius: 0;
         }
-
         .input-group select { appearance: none; -webkit-appearance: none; cursor: pointer; background: url('data:image/svg+xml;utf8,<svg fill="%23d4af37" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>') no-repeat right center; }
         .input-group select option { background: var(--emerald-light); color: var(--bone); }
-
-        .input-group input:focus, .input-group select:focus {
-            border-bottom-color: var(--gold-metallic); box-shadow: 0 10px 10px -10px rgba(212, 175, 55, 0.1);
-        }
-
-        .input-group input::placeholder { color: rgba(230, 228, 220, 0.2); }
+        .input-group input:focus, .input-group select:focus { border-bottom-color: var(--gold-metallic); }
         ::-webkit-calendar-picker-indicator { filter: invert(70%) sepia(40%) saturate(400%) hue-rotate(5deg) brightness(90%) contrast(90%); cursor: pointer; }
 
         .confirm-btn {
-            margin-top: 2rem; width: 100%; padding: 1.5rem; background: var(--gold-metallic); color: var(--emerald-black);
-            border: none; font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 3px; cursor: pointer; transition: all 0.3s ease;
-            opacity: 0; transform: translateY(20px);
+            margin-top: 2rem; width: 100%; padding: 1.5rem; background: var(--gold-metallic); color: var(--emerald-black); border: none; font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 3px; cursor: pointer; transition: all 0.3s ease; opacity: 0; transform: translateY(20px);
         }
         .confirm-btn:hover { background: var(--bone); }
 
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
+            .hero-info-bar { display: none; /* Hide on mobile to keep hero clean, info stays in footer */ }
+            .grid-layout, .grid-layout.reverse { grid-template-columns: 1fr; gap: 3rem; }
+            .hero h1 { font-size: 10vw; }
             .booking-drawer { width: 100%; padding: 2rem; }
-            .form-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-            .hero h1 { font-size: 12vw; }
+            .form-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -174,16 +179,11 @@
 
     <div class="noise-overlay"></div>
 
-    <!-- Hero -->
+    <!-- 1. HERO & FLOATING INFO BAR -->
     <section class="hero">
-        
-        <!-- THE CINEMATIC VIDEO BACKGROUND -->
-        <!-- Just replace "YOUR_VIDEO_FILE.mp4" with the reel file once you have it -->
         <video class="ambient-video" autoplay loop muted playsinline>
-            <source src="YOUR_VIDEO_FILE.mp4" type="video/mp4">
+            <source src="hero-bg.mp4" type="video/mp4">
         </video>
-        
-        <!-- The overlay mask to make text pop -->
         <div class="video-mask"></div>
 
         <div class="hero-content">
@@ -191,9 +191,52 @@
             <h1>The Royal<br><span>Indian Journey.</span></h1>
             <button class="btn-primary" id="heroBookBtn">Request a Table</button>
         </div>
+
+        <!-- The Floating Data Dashboard -->
+        <div class="hero-info-bar">
+            <div class="info-block">
+                <span class="info-label">Location</span>
+                <div class="info-data">7/2/ A/1, Mumbra - Panvel Hwy<br>Rohinjan, Navi Mumbai 410206</div>
+            </div>
+            <div class="info-block">
+                <span class="info-label">Reservations</span>
+                <div class="info-data">82682-66644<br>admin@gazebodhaba.in</div>
+            </div>
+            <div class="info-block">
+                <span class="info-label">Operating Hours</span>
+                <div class="info-data">Open Daily<br>12:00 PM — 03:00 AM</div>
+            </div>
+        </div>
     </section>
 
-    <!-- VIP Concierge Drawer -->
+    <!-- 2. EDITORIAL GALLERY SCROLL -->
+    <section class="gallery-section">
+        
+        <!-- Showcase 1 -->
+        <div class="grid-layout">
+            <div class="text-block">
+                <h2>The Sizzler<br>Experience</h2>
+                <p>An orchestration of heat and spice. Fresh Moroccan aromatics served on a smoking cast-iron canvas. A sensory experience that transcends traditional dining formats.</p>
+            </div>
+            <div class="image-wrapper gs-reveal">
+                <img class="gs-parallax" src="https://images.unsplash.com/photo-1544025162-8315ea070d5b?q=80&w=2070&auto=format&fit=crop" alt="Signature Sizzler">
+            </div>
+        </div>
+
+        <!-- Showcase 2 (Reversed) -->
+        <div class="grid-layout reverse">
+            <div class="image-wrapper gs-reveal">
+                <img class="gs-parallax" src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1974&auto=format&fit=crop" alt="Dhaba Ambience">
+            </div>
+            <div class="text-block">
+                <h2>A Canvas of<br>Light & Smoke</h2>
+                <p>Designed for scale and intimacy. Underneath a canopy of ambient lights, Gazebo Dhaba provides a cinematic backdrop for celebrations and unforgettable evenings.</p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- VIP CONCIERGE DRAWER -->
     <div class="drawer-overlay" id="drawerOverlay"></div>
     <div class="booking-drawer">
         <div class="drawer-header">
@@ -205,24 +248,10 @@
         </div>
         
         <div class="form-grid">
-            <div class="input-group gs-form-item">
-                <label>First Name</label>
-                <input type="text" placeholder="e.g. Rahul">
-            </div>
-            <div class="input-group gs-form-item">
-                <label>Last Name</label>
-                <input type="text" placeholder="e.g. Sharma">
-            </div>
-            
-            <div class="input-group full-width gs-form-item">
-                <label>Phone Number</label>
-                <input type="tel" placeholder="+91">
-            </div>
-
-            <div class="input-group gs-form-item">
-                <label>Date & Time</label>
-                <input type="datetime-local">
-            </div>
+            <div class="input-group gs-form-item"><label>First Name</label><input type="text" placeholder="e.g. Rahul"></div>
+            <div class="input-group gs-form-item"><label>Last Name</label><input type="text" placeholder="e.g. Sharma"></div>
+            <div class="input-group full-width gs-form-item"><label>Phone Number</label><input type="tel" placeholder="+91"></div>
+            <div class="input-group gs-form-item"><label>Date & Time</label><input type="datetime-local"></div>
             <div class="input-group gs-form-item">
                 <label>Number of Guests</label>
                 <select>
@@ -237,34 +266,64 @@
         <button class="confirm-btn gs-form-item">Confirm Details</button>
     </div>
 
-    <!-- GSAP -->
+    <!-- GSAP LIBRARIES -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
     <script>
-        // --- DRAWER & ANIMATION LOGIC ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        // --- HERO TEXT REVEAL ---
+        gsap.from(".hero h1", { y: 50, opacity: 0, duration: 1.5, ease: "power4.out", delay: 0.2 });
+        gsap.from(".hero-info-bar", { y: 20, opacity: 0, duration: 1, ease: "power2.out", delay: 0.8 });
+
+        // --- MAGNETIC BUTTON PHYSICS ---
+        const magneticBtn = document.getElementById('heroBookBtn');
+        magneticBtn.addEventListener('mousemove', (e) => {
+            const position = magneticBtn.getBoundingClientRect();
+            const x = e.pageX - position.left - position.width / 2;
+            const y = e.pageY - position.top - position.height / 2;
+            gsap.to(magneticBtn, { x: x * 0.3, y: y * 0.3, duration: 0.5, ease: "power2.out" });
+        });
+        magneticBtn.addEventListener('mouseleave', () => {
+            gsap.to(magneticBtn, { x: 0, y: 0, duration: 1, ease: "elastic.out(1, 0.3)" });
+        });
+
+        // --- EDITORIAL SCROLL REVEAL (The Wow Factor) ---
+        gsap.utils.toArray('.gs-reveal').forEach(wrapper => {
+            gsap.to(wrapper, {
+                clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
+                ease: "power3.inOut", duration: 1.5,
+                scrollTrigger: { trigger: wrapper, start: "top 85%" }
+            });
+        });
+
+        gsap.utils.toArray('.gs-parallax').forEach(img => {
+            gsap.to(img, {
+                y: "20%", ease: "none",
+                scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: true }
+            });
+        });
+
+        // --- VIP DRAWER LOGIC ---
         const body = document.body;
-        const openBtn = document.getElementById('heroBookBtn');
         const closeBtn = document.getElementById('closeDrawerBtn');
         const overlay = document.getElementById('drawerOverlay');
         const formItems = gsap.utils.toArray('.gs-form-item');
-
         let isDrawerOpen = false;
 
         function toggleDrawer() {
             isDrawerOpen = !isDrawerOpen;
-            
             if (isDrawerOpen) {
                 body.classList.add('drawer-open');
-                gsap.to(formItems, {
-                    y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power3.out", delay: 0.3
-                });
+                gsap.to(formItems, { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power3.out", delay: 0.3 });
             } else {
                 body.classList.remove('drawer-open');
                 gsap.set(formItems, { y: 20, opacity: 0 });
             }
         }
 
-        openBtn.addEventListener('click', toggleDrawer);
+        magneticBtn.addEventListener('click', toggleDrawer);
         closeBtn.addEventListener('click', toggleDrawer);
         overlay.addEventListener('click', toggleDrawer);
     </script>
