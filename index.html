@@ -5,325 +5,278 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gazebo Dhaba | The Royal Indian Journey</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
     
     <style>
         /* --- CORE ARCHITECTURE --- */
         :root {
-            --emerald-black: #040d08;
-            --emerald-light: #07160e;
-            --gold-metallic: #d4af37;
+            --bg-dark: #040d08;
+            --gold: #d4af37;
             --gold-muted: #8a7324;
             --bone: #e6e4dc;
-            --border-faint: rgba(212, 175, 55, 0.2);
+            --border: rgba(212, 175, 55, 0.15);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; /* Hides default cursor */ }
         
         body {
-            background-color: var(--emerald-black);
-            color: var(--bone);
+            background-color: var(--bg-dark); color: var(--bone);
             font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden; -webkit-font-smoothing: antialiased;
         }
 
-        /* --- CINEMATIC FILM GRAIN --- */
-        .noise-overlay {
-            position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.04;
-            background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+        /* --- THE CUSTOM CURSOR --- */
+        .cursor-dot, .cursor-outline {
+            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
+            border-radius: 50%; z-index: 9999; pointer-events: none;
+        }
+        .cursor-dot { width: 5px; height: 5px; background-color: var(--gold); }
+        .cursor-outline {
+            width: 40px; height: 40px; border: 1px solid rgba(212, 175, 55, 0.5);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        /* When hovering over interactive elements */
+        .cursor-hover .cursor-outline {
+            width: 60px; height: 60px; background-color: rgba(212, 175, 55, 0.1); border-color: var(--gold);
         }
 
-        /* --- 1. HERO SECTION --- */
-        .hero {
-            position: relative; height: 100vh; width: 100%;
+        /* --- THE PRELOADER --- */
+        .preloader {
+            position: fixed; inset: 0; background: var(--bg-dark); z-index: 10000;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            overflow: hidden;
         }
+        .counter { font-family: 'Playfair Display', serif; font-size: 5vw; color: var(--gold); font-style: italic; }
+        .loading-bar-container { width: 200px; height: 1px; background: rgba(255,255,255,0.1); margin-top: 20px; overflow: hidden;}
+        .loading-bar { width: 0%; height: 100%; background: var(--gold); }
 
-        .ambient-video {
-            position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%;
-            transform: translateX(-50%) translateY(-50%); z-index: 0; object-fit: cover; opacity: 0.4; 
-        }
+        /* --- HORIZONTAL SCROLL WRAPPER --- */
+        .scroll-container { width: 100%; height: 100vh; overflow: hidden; }
+        .horizontal-wrapper { display: flex; width: 300vw; height: 100vh; will-change: transform; }
+        .panel { width: 100vw; height: 100vh; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 
-        .video-mask {
-            position: absolute; inset: 0;
-            background: radial-gradient(circle at center, rgba(4, 13, 8, 0.2) 0%, rgba(4, 13, 8, 0.95) 100%);
-            z-index: 1;
-        }
+        /* --- PANEL 1: THE HERO JOURNEY --- */
+        .panel-hero { background: var(--bg-dark); }
+        .ambient-video { position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; transform: translate(-50%, -50%); object-fit: cover; opacity: 0.3; }
+        .video-mask { position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(4, 13, 8, 0.1) 0%, var(--bg-dark) 100%); }
+        
+        .hero-content { position: relative; z-index: 2; text-align: center; display: flex; flex-direction: column; align-items: center; }
+        .brand-logo { width: 120px; height: 120px; background: url('logo.png') center/contain no-repeat; margin-bottom: 2rem; }
+        .hero-title { font-family: 'Playfair Display', serif; font-size: 8vw; line-height: 1; margin-bottom: 1rem; overflow: hidden; }
+        .hero-title span { display: block; transform: translateY(100%); } /* For GSAP Text Reveal */
+        .gold-text { color: var(--gold); font-style: italic; }
 
-        .hero-content {
-            position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; text-align: center;
-        }
+        /* --- PANEL 2: THE SIZZLER (EDITORIAL MASK) --- */
+        .panel-menu { background: var(--bg-dark); justify-content: space-between; padding: 0 10vw; }
+        .menu-text { width: 40%; z-index: 2; }
+        .menu-text h2 { font-family: 'Playfair Display', serif; font-size: 4vw; color: var(--gold); margin-bottom: 20px; }
+        .menu-text p { font-size: 1rem; line-height: 1.8; color: rgba(255,255,255,0.6); }
+        
+        .menu-image-container { width: 45%; height: 70vh; overflow: hidden; position: relative; }
+        .menu-image-container img { width: 100%; height: 130%; object-fit: cover; position: absolute; top: -15%; }
 
-        .brand-logo {
-            width: 140px; height: 140px; margin-bottom: 2rem;
-            background: url('logo.png') center/contain no-repeat;
-            filter: drop-shadow(0px 10px 20px rgba(212, 175, 55, 0.3)); 
-        }
+        /* --- PANEL 3: THE VIP CONTACT --- */
+        .panel-contact { background: var(--bg-dark); flex-direction: column; }
+        .contact-content { display: flex; flex-direction: column; align-items: center; text-align: center; z-index: 2;}
+        .massive-book { font-family: 'Playfair Display', serif; font-size: 10vw; color: transparent; -webkit-text-stroke: 1px rgba(212, 175, 55, 0.3); transition: all 0.4s ease; cursor: none; }
+        .massive-book:hover { color: var(--gold); -webkit-text-stroke: 1px var(--gold); }
+        
+        .info-grid { display: flex; gap: 4vw; margin-top: 5vh; }
+        .info-col { text-align: left; }
+        .info-col h4 { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold-muted); margin-bottom: 10px; }
+        .info-col p { font-size: 0.85rem; color: var(--bone); line-height: 1.6; }
 
-        .hero h1 {
-            font-family: 'Playfair Display', serif; font-size: 6vw; font-weight: 400; line-height: 1.1; margin-bottom: 2.5rem;
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); /* Setup for GSAP reveal */
-        }
-        .hero h1 span { color: var(--gold-metallic); }
-
-        .btn-primary {
-            padding: 1.2rem 3.5rem; background: transparent; color: var(--gold-metallic);
-            border: 1px solid var(--border-faint); font-family: 'Inter', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px;
-            cursor: pointer; transition: all 0.4s ease; position: relative; overflow: hidden; backdrop-filter: blur(5px);
-        }
-        .btn-primary::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--gold-metallic); transform: scaleY(0); transform-origin: bottom; transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1); z-index: -1;
-        }
-        .btn-primary:hover { color: var(--emerald-black); border-color: var(--gold-metallic); }
-        .btn-primary:hover::before { transform: scaleY(1); }
-
-        /* --- FLOATING INFO BAR --- */
-        .hero-info-bar {
-            position: absolute; bottom: 0; left: 0; width: 100%; z-index: 5;
-            display: grid; grid-template-columns: repeat(3, 1fr);
-            border-top: 1px solid var(--border-faint);
-            background: rgba(4, 13, 8, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-        }
-
-        .info-block {
-            padding: 2rem; border-right: 1px solid var(--border-faint); text-align: left;
-        }
-        .info-block:last-child { border-right: none; }
-
-        .info-label {
-            display: block; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 3px;
-            color: var(--gold-muted); margin-bottom: 0.8rem;
-        }
-
-        .info-data {
-            font-size: 0.85rem; line-height: 1.6; color: var(--bone);
-        }
-
-        /* --- 2. EDITORIAL GALLERY SECTION --- */
-        .gallery-section {
-            padding: 10vw 5vw; background-color: var(--emerald-black); position: relative; z-index: 10;
-        }
-
-        .grid-layout {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 8vw; align-items: center; margin-bottom: 15vh;
-        }
-        .grid-layout.reverse { grid-template-columns: 1.2fr 0.8fr; }
-        .grid-layout.reverse .text-block { order: -1; }
-
-        .text-block h2 {
-            font-family: 'Playfair Display', serif; font-size: 3.5vw; font-weight: 400; line-height: 1.2; margin-bottom: 1.5rem; color: var(--gold-metallic);
-        }
-        .text-block p {
-            font-size: 0.95rem; line-height: 1.8; color: rgba(230, 228, 220, 0.7);
-        }
-
-        .image-wrapper {
-            position: relative; width: 100%; height: 75vh; overflow: hidden;
-            clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%); /* Starts hidden for GSAP scroll */
-        }
-        .grid-layout.reverse .image-wrapper { height: 60vh; }
-
-        .image-wrapper img {
-            width: 100%; height: 120%; object-fit: cover; position: absolute; top: -10%;
-        }
-
-        /* --- VIP CONCIERGE DRAWER --- */
-        .drawer-overlay {
-            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); z-index: 99; opacity: 0; visibility: hidden; transition: all 0.6s ease;
-        }
+        /* --- THE VIP DRAWER --- */
+        .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 99; opacity: 0; visibility: hidden; transition: all 0.6s ease; }
         .booking-drawer {
-            position: fixed; top: 0; right: 0; width: 550px; height: 100%;
-            background: var(--emerald-black); border-left: 1px solid var(--border-faint);
-            z-index: 100; padding: 4rem; display: flex; flex-direction: column; overflow-y: auto;
-            transform: translateX(100%); transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            position: fixed; top: 0; right: 0; width: 550px; height: 100%; background: var(--bg-dark); border-left: 1px solid var(--border);
+            z-index: 100; padding: 4rem; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
         }
         .drawer-open .booking-drawer { transform: translateX(0); }
         .drawer-open .drawer-overlay { opacity: 1; visibility: visible; }
         
         .drawer-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3rem; }
-        .drawer-header h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 400; color: var(--bone); line-height: 1; margin-bottom: 0.5rem;}
-        .drawer-header p { font-size: 0.8rem; color: var(--gold-muted); letter-spacing: 1px; text-transform: uppercase; }
-        .close-btn { background: none; border: none; color: var(--bone); font-size: 2.5rem; cursor: pointer; line-height: 0.8; opacity: 0.5; transition: opacity 0.3s; }
-        .close-btn:hover { opacity: 1; color: var(--gold-metallic); }
+        .drawer-header h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--bone); line-height: 1; }
+        .close-btn { background: none; border: none; color: var(--bone); font-size: 2.5rem; line-height: 0.8; opacity: 0.5; cursor: none; }
+        .close-btn:hover { color: var(--gold); opacity: 1; }
 
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
         .full-width { grid-column: 1 / -1; }
-        .input-group { position: relative; opacity: 0; transform: translateY(20px); }
         .input-group label { display: block; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold-muted); margin-bottom: 0.8rem; }
-        .input-group input, .input-group select {
-            width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--border-faint); color: var(--bone); padding: 0.5rem 0; font-family: 'Inter', sans-serif; font-size: 1rem; outline: none; transition: all 0.3s ease; border-radius: 0;
-        }
-        .input-group select { appearance: none; -webkit-appearance: none; cursor: pointer; background: url('data:image/svg+xml;utf8,<svg fill="%23d4af37" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>') no-repeat right center; }
-        .input-group select option { background: var(--emerald-light); color: var(--bone); }
-        .input-group input:focus, .input-group select:focus { border-bottom-color: var(--gold-metallic); }
-        ::-webkit-calendar-picker-indicator { filter: invert(70%) sepia(40%) saturate(400%) hue-rotate(5deg) brightness(90%) contrast(90%); cursor: pointer; }
-
-        .confirm-btn {
-            margin-top: 2rem; width: 100%; padding: 1.5rem; background: var(--gold-metallic); color: var(--emerald-black); border: none; font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 3px; cursor: pointer; transition: all 0.3s ease; opacity: 0; transform: translateY(20px);
-        }
+        .input-group input, .input-group select { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--border); color: var(--bone); padding: 0.5rem 0; font-family: 'Inter', sans-serif; font-size: 1rem; outline: none; transition: 0.3s; }
+        .input-group input:focus, .input-group select:focus { border-bottom-color: var(--gold); }
+        .confirm-btn { margin-top: auto; padding: 1.5rem; background: var(--gold); color: var(--bg-dark); border: none; font-weight: 600; text-transform: uppercase; letter-spacing: 3px; cursor: none; }
         .confirm-btn:hover { background: var(--bone); }
-
-        @media (max-width: 768px) {
-            .hero-info-bar { display: none; /* Hide on mobile to keep hero clean, info stays in footer */ }
-            .grid-layout, .grid-layout.reverse { grid-template-columns: 1fr; gap: 3rem; }
-            .hero h1 { font-size: 10vw; }
-            .booking-drawer { width: 100%; padding: 2rem; }
-            .form-grid { grid-template-columns: 1fr; }
-        }
     </style>
 </head>
 <body>
 
-    <div class="noise-overlay"></div>
+    <!-- CUSTOM CURSOR -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
 
-    <!-- 1. HERO & FLOATING INFO BAR -->
-    <section class="hero">
-        <video class="ambient-video" autoplay loop muted playsinline>
-            <source src="hero-bg.mp4" type="video/mp4">
-        </video>
-        <div class="video-mask"></div>
-
-        <div class="hero-content">
-            <div class="brand-logo"></div>
-            <h1>The Royal<br><span>Indian Journey.</span></h1>
-            <button class="btn-primary" id="heroBookBtn">Request a Table</button>
+    <!-- PRELOADER -->
+    <div class="preloader">
+        <div class="counter">0%</div>
+        <div class="loading-bar-container">
+            <div class="loading-bar"></div>
         </div>
+    </div>
 
-        <!-- The Floating Data Dashboard -->
-        <div class="hero-info-bar">
-            <div class="info-block">
-                <span class="info-label">Location</span>
-                <div class="info-data">7/2/ A/1, Mumbra - Panvel Hwy<br>Rohinjan, Navi Mumbai 410206</div>
-            </div>
-            <div class="info-block">
-                <span class="info-label">Reservations</span>
-                <div class="info-data">82682-66644<br>admin@gazebodhaba.in</div>
-            </div>
-            <div class="info-block">
-                <span class="info-label">Operating Hours</span>
-                <div class="info-data">Open Daily<br>12:00 PM — 03:00 AM</div>
-            </div>
+    <!-- MAIN HORIZONTAL EXPERIENCE -->
+    <div class="scroll-container" id="scroll-container">
+        <div class="horizontal-wrapper" id="horizontal-wrapper">
+            
+            <!-- PANEL 1: HERO -->
+            <section class="panel panel-hero">
+                <video class="ambient-video" autoplay loop muted playsinline>
+                    <source src="hero-bg.mp4" type="video/mp4">
+                </video>
+                <div class="video-mask"></div>
+                <div class="hero-content">
+                    <div class="brand-logo"></div>
+                    <h1 class="hero-title"><span class="title-line">The Royal</span></h1>
+                    <h1 class="hero-title"><span class="title-line gold-text">Indian Journey.</span></h1>
+                    <p style="margin-top:20px; font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase; color: #8a7324;">Scroll to Explore</p>
+                </div>
+            </section>
+
+            <!-- PANEL 2: THE FOOD -->
+            <section class="panel panel-menu">
+                <div class="menu-text">
+                    <h2>The Sizzler<br>Experience</h2>
+                    <p>An orchestration of heat and spice. Fresh aromatics served on a smoking cast-iron canvas. A sensory experience that transcends traditional dining formats.</p>
+                </div>
+                <div class="menu-image-container">
+                    <img class="parallax-img" src="https://images.unsplash.com/photo-1544025162-8315ea070d5b?q=80&w=2070&auto=format&fit=crop" alt="Signature Sizzler">
+                </div>
+            </section>
+
+            <!-- PANEL 3: THE BOOKING -->
+            <section class="panel panel-contact">
+                <div class="contact-content">
+                    <h1 class="massive-book interactive-hover" id="openDrawerBtn">Reserve Table</h1>
+                    <div class="info-grid">
+                        <div class="info-col">
+                            <h4>Location</h4>
+                            <p>7/2/ A/1, Panvel Hwy<br>Navi Mumbai 410206</p>
+                        </div>
+                        <div class="info-col">
+                            <h4>Hours</h4>
+                            <p>Open Daily<br>12:00 PM — 03:00 AM</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
         </div>
-    </section>
+    </div>
 
-    <!-- 2. EDITORIAL GALLERY SCROLL -->
-    <section class="gallery-section">
-        
-        <!-- Showcase 1 -->
-        <div class="grid-layout">
-            <div class="text-block">
-                <h2>The Sizzler<br>Experience</h2>
-                <p>An orchestration of heat and spice. Fresh Moroccan aromatics served on a smoking cast-iron canvas. A sensory experience that transcends traditional dining formats.</p>
-            </div>
-            <div class="image-wrapper gs-reveal">
-                <img class="gs-parallax" src="https://images.unsplash.com/photo-1544025162-8315ea070d5b?q=80&w=2070&auto=format&fit=crop" alt="Signature Sizzler">
-            </div>
-        </div>
-
-        <!-- Showcase 2 (Reversed) -->
-        <div class="grid-layout reverse">
-            <div class="image-wrapper gs-reveal">
-                <img class="gs-parallax" src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1974&auto=format&fit=crop" alt="Dhaba Ambience">
-            </div>
-            <div class="text-block">
-                <h2>A Canvas of<br>Light & Smoke</h2>
-                <p>Designed for scale and intimacy. Underneath a canopy of ambient lights, Gazebo Dhaba provides a cinematic backdrop for celebrations and unforgettable evenings.</p>
-            </div>
-        </div>
-
-    </section>
-
-    <!-- VIP CONCIERGE DRAWER -->
+    <!-- VIP DRAWER -->
     <div class="drawer-overlay" id="drawerOverlay"></div>
     <div class="booking-drawer">
         <div class="drawer-header">
-            <div>
-                <h2>Reservations</h2>
-                <p>Gazebo Dhaba Exclusive</p>
-            </div>
-            <button class="close-btn" id="closeDrawerBtn">&times;</button>
+            <h2>Reservations</h2>
+            <button class="close-btn interactive-hover" id="closeDrawerBtn">&times;</button>
         </div>
-        
         <div class="form-grid">
-            <div class="input-group gs-form-item"><label>First Name</label><input type="text" placeholder="e.g. Rahul"></div>
-            <div class="input-group gs-form-item"><label>Last Name</label><input type="text" placeholder="e.g. Sharma"></div>
-            <div class="input-group full-width gs-form-item"><label>Phone Number</label><input type="tel" placeholder="+91"></div>
-            <div class="input-group gs-form-item"><label>Date & Time</label><input type="datetime-local"></div>
-            <div class="input-group gs-form-item">
-                <label>Number of Guests</label>
-                <select>
-                    <option value="" disabled selected>Select Party Size</option>
-                    <option>2 Guests - Standard</option>
-                    <option>4 Guests - Standard</option>
-                    <option>6 Guests - Family Table</option>
-                    <option>8+ Guests - VIP Platter</option>
-                </select>
+            <div class="input-group"><label>First Name</label><input type="text"></div>
+            <div class="input-group"><label>Last Name</label><input type="text"></div>
+            <div class="input-group full-width"><label>Phone Number</label><input type="tel"></div>
+            <div class="input-group"><label>Date & Time</label><input type="datetime-local"></div>
+            <div class="input-group">
+                <label>Guests</label>
+                <select><option>2 Guests</option><option>4 Guests</option><option>8+ VIP</option></select>
             </div>
         </div>
-        <button class="confirm-btn gs-form-item">Confirm Details</button>
+        <button class="confirm-btn interactive-hover">Confirm Details</button>
     </div>
 
-    <!-- GSAP LIBRARIES -->
+    <!-- LIBRARIES -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // --- HERO TEXT REVEAL ---
-        gsap.from(".hero h1", { y: 50, opacity: 0, duration: 1.5, ease: "power4.out", delay: 0.2 });
-        gsap.from(".hero-info-bar", { y: 20, opacity: 0, duration: 1, ease: "power2.out", delay: 0.8 });
-
-        // --- MAGNETIC BUTTON PHYSICS ---
-        const magneticBtn = document.getElementById('heroBookBtn');
-        magneticBtn.addEventListener('mousemove', (e) => {
-            const position = magneticBtn.getBoundingClientRect();
-            const x = e.pageX - position.left - position.width / 2;
-            const y = e.pageY - position.top - position.height / 2;
-            gsap.to(magneticBtn, { x: x * 0.3, y: y * 0.3, duration: 0.5, ease: "power2.out" });
-        });
-        magneticBtn.addEventListener('mouseleave', () => {
-            gsap.to(magneticBtn, { x: 0, y: 0, duration: 1, ease: "elastic.out(1, 0.3)" });
+        // --- 1. CUSTOM CURSOR LOGIC ---
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        
+        // Fast, smooth tracking
+        const xTo = gsap.quickTo(cursorOutline, "x", {duration: 0.15, ease: "power3"});
+        const yTo = gsap.quickTo(cursorOutline, "y", {duration: 0.15, ease: "power3"});
+        
+        window.addEventListener("mousemove", e => {
+            gsap.set(cursorDot, {x: e.clientX, y: e.clientY}); // Dot moves instantly
+            xTo(e.clientX); yTo(e.clientY); // Outline trails slightly
         });
 
-        // --- EDITORIAL SCROLL REVEAL (The Wow Factor) ---
-        gsap.utils.toArray('.gs-reveal').forEach(wrapper => {
-            gsap.to(wrapper, {
-                clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
-                ease: "power3.inOut", duration: 1.5,
-                scrollTrigger: { trigger: wrapper, start: "top 85%" }
-            });
+        // Add hover effect to anything with class 'interactive-hover' or standard inputs
+        const interactives = document.querySelectorAll('.interactive-hover, input, select');
+        interactives.forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
         });
 
-        gsap.utils.toArray('.gs-parallax').forEach(img => {
-            gsap.to(img, {
-                y: "20%", ease: "none",
-                scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: true }
-            });
+        // --- 2. PRELOADER & HERO REVEAL ---
+        let counter = { value: 0 };
+        const counterEl = document.querySelector('.counter');
+        const preloader = document.querySelector('.preloader');
+
+        // Count up from 0 to 100
+        gsap.to(counter, {
+            value: 100, duration: 2, ease: "power2.inOut",
+            onUpdate: () => { counterEl.innerText = Math.round(counter.value) + "%"; },
+            onComplete: () => {
+                // When done, slide preloader UP and out of the way
+                gsap.to(preloader, { yPercent: -100, duration: 1, ease: "power4.inOut" });
+                
+                // Then reveal the Hero Text from the bottom up
+                gsap.to(".title-line", {
+                    y: "0%", duration: 1.2, stagger: 0.2, ease: "power4.out", delay: 0.5
+                });
+            }
+        });
+        
+        // Load the bar visually
+        gsap.to(".loading-bar", { width: "100%", duration: 2, ease: "power2.inOut" });
+
+        // --- 3. HORIZONTAL SCROLL HIJACK ---
+        const wrapper = document.getElementById("horizontal-wrapper");
+        const panels = gsap.utils.toArray(".panel");
+
+        let scrollTween = gsap.to(wrapper, {
+            xPercent: -100 * (panels.length - 1),
+            ease: "none",
+            scrollTrigger: {
+                trigger: "#scroll-container",
+                pin: true, // Pins the container to the screen
+                scrub: 1, // Smooth scrubbing linking to scroll wheel
+                end: () => "+=" + wrapper.offsetWidth
+            }
         });
 
-        // --- VIP DRAWER LOGIC ---
+        // --- 4. INNER PARALLAX (Image moves within horizontal scroll) ---
+        gsap.to(".parallax-img", {
+            y: "15%",
+            ease: "none",
+            scrollTrigger: {
+                trigger: ".panel-menu",
+                containerAnimation: scrollTween,
+                start: "left right",
+                end: "right left",
+                scrub: true
+            }
+        });
+
+        // --- 5. DRAWER LOGIC ---
         const body = document.body;
+        const openBtn = document.getElementById('openDrawerBtn');
         const closeBtn = document.getElementById('closeDrawerBtn');
         const overlay = document.getElementById('drawerOverlay');
-        const formItems = gsap.utils.toArray('.gs-form-item');
-        let isDrawerOpen = false;
 
-        function toggleDrawer() {
-            isDrawerOpen = !isDrawerOpen;
-            if (isDrawerOpen) {
-                body.classList.add('drawer-open');
-                gsap.to(formItems, { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power3.out", delay: 0.3 });
-            } else {
-                body.classList.remove('drawer-open');
-                gsap.set(formItems, { y: 20, opacity: 0 });
-            }
-        }
-
-        magneticBtn.addEventListener('click', toggleDrawer);
+        function toggleDrawer() { body.classList.toggle('drawer-open'); }
+        openBtn.addEventListener('click', toggleDrawer);
         closeBtn.addEventListener('click', toggleDrawer);
         overlay.addEventListener('click', toggleDrawer);
     </script>
