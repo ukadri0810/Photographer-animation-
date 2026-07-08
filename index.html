@@ -3,375 +3,448 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gazebo Dhaba | Exclusive VIP Booking</title>
+    <title>Gazebo Dhaba | The Royal Indian Journey</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,600;0,800;1,400&display=swap" rel="stylesheet">
+    <!-- Premium Editorial Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     
     <style>
-        /* --- RESET & BRANDED ROYAL BASE --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body, html {
-            width: 100%;
-            height: 100%;
-            /* Updated to match the deep forest green/black from their logo */
-            background-color: #040d08; 
-            color: #f4f4f0;
-            font-family: 'Inter', sans-serif;
-            overflow: hidden; 
+        /* --- CORE ARCHITECTURE --- */
+        :root {
+            --emerald-black: #040d08;
+            --emerald-light: #0a1f14;
+            --gold-metallic: #d4af37;
+            --gold-muted: #967d2b;
+            --bone: #e6e4dc;
+            --border-faint: rgba(212, 175, 55, 0.15);
         }
 
-        /* --- THE INTERACTIVE SMOKE CANVAS --- */
-        #smokeCanvas {
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--emerald-black);
+            color: var(--bone);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- GLOBAL UI ELEMENTS --- */
+        .gold-text { color: var(--gold-metallic); }
+        
+        .micro-heading {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--gold-muted);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 2rem 4vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 50;
+            mix-blend-mode: difference;
+        }
+
+        .nav-link {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        #emberCanvas {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: 1;
-            pointer-events: auto; 
+            opacity: 0.6;
         }
 
-        /* --- HERO CONTENT UI --- */
-        .hero-ui {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        .hero-content {
+            position: relative;
             z-index: 2;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            pointer-events: none; 
-            /* Subtle green radial gradient */
-            background: radial-gradient(circle at center, transparent 0%, rgba(4,13,8,0.9) 100%);
-        }
-
-        /* The Logo Container */
-        .brand-logo {
-            width: 120px;
-            height: 120px;
-            margin-bottom: 20px;
-            border-radius: 50%;
-            /* Add the image file name here once it's on your computer */
-            background: url('YOUR_LOGO_FILE_NAME.png') center/cover no-repeat;
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
-            animation: fadeIn 2s ease-out;
-        }
-
-        .subtitle {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            /* Exact Metallic Gold from logo */
-            color: #d4af37; 
-            margin-bottom: 10px;
-            animation: fadeIn 2s ease-out;
-        }
-
-        .title {
-            font-family: 'Playfair Display', serif;
-            font-size: 6vw;
-            font-weight: 800;
-            line-height: 1;
             text-align: center;
-            margin-bottom: 40px;
-            text-shadow: 0 10px 30px rgba(0,0,0,0.8);
-            animation: slideUp 1.5s ease-out;
         }
 
-        /* --- MAGNETIC BOOKING BUTTON --- */
-        .book-btn {
-            pointer-events: auto; 
-            padding: 18px 40px;
-            font-size: 1rem;
+        .brand-logo {
+            width: 140px;
+            height: 140px;
+            margin-bottom: 2rem;
+            background: url('logo.png') center/contain no-repeat;
+            /* Subtle glow to separate it from the dark background */
+            filter: drop-shadow(0px 10px 20px rgba(212, 175, 55, 0.2)); 
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 7vw;
+            font-weight: 400;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            margin-bottom: 2rem;
+        }
+
+        .btn-primary {
+            padding: 1rem 3rem;
+            background: transparent;
+            color: var(--gold-metallic);
+            border: 1px solid var(--gold-metallic);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: #040d08;
-            /* Gold gradient to mimic the metallic shine */
-            background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
-            border: none;
-            border-radius: 4px;
             cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .book-btn:hover {
-            box-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
-            transform: translateY(-2px);
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--gold-metallic);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease;
+            z-index: -1;
         }
 
-        /* --- FROSTED GLASS BOOKING DRAWER --- */
-        .drawer-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .btn-primary:hover { color: var(--emerald-black); }
+        .btn-primary:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* --- THE ASYMMETRICAL EDITORIAL GRID --- */
+        .editorial-section {
+            padding: 10vw 5vw;
+            background-color: var(--emerald-black);
+            position: relative;
+            z-index: 10;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10vw;
+            align-items: center;
+            margin-bottom: 15vh;
+        }
+
+        /* Reversing the grid for the zigzag effect */
+        .grid-layout.reverse {
+            grid-template-columns: 1.2fr 0.8fr;
+        }
+        .grid-layout.reverse .text-block { order: -1; }
+
+        .text-block { padding: 0 2vw; }
+        .text-block h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4vw;
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 2rem;
+        }
+        .text-block p {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: rgba(230, 228, 220, 0.7);
+        }
+
+        /* The Custom Image Masking Reveal */
+        .image-wrapper {
+            position: relative;
             width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 9;
+            height: 80vh;
+            overflow: hidden;
+            clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%); /* Start hidden */
+        }
+
+        .grid-layout.reverse .image-wrapper { height: 60vh; }
+
+        .image-wrapper img {
+            width: 100%;
+            height: 120%; /* Extra height for parallax */
+            object-fit: cover;
+            position: absolute;
+            top: -10%;
+        }
+
+        /* Solving the Blue Button Problem: Hover-to-Cart */
+        .hover-cart-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(4, 13, 8, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
             opacity: 0;
-            visibility: hidden;
+            transition: opacity 0.4s ease;
+            cursor: pointer;
+        }
+
+        .image-wrapper:hover .hover-cart-overlay { opacity: 1; }
+
+        .add-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold-metallic);
+            border: 1px solid var(--gold-metallic);
+            padding: 1rem 2rem;
+        }
+
+        /* --- THE VIP BOOKING DRAWER (Kept from previous build) --- */
+        .drawer-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 99;
+            opacity: 0; visibility: hidden;
             transition: all 0.4s ease;
         }
 
         .booking-drawer {
-            position: fixed;
-            top: 0;
-            right: -100%; 
-            width: 400px;
-            height: 100%;
-            /* Deep green frosted glass */
-            background: rgba(8, 20, 13, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-left: 1px solid rgba(212, 175, 55, 0.2);
-            z-index: 10;
-            padding: 50px 40px;
-            display: flex;
-            flex-direction: column;
-            transition: right 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            position: fixed; top: 0; right: -100%;
+            width: 450px; height: 100%;
+            background: var(--emerald-light);
+            border-left: 1px solid var(--border-faint);
+            z-index: 100;
+            padding: 4rem 3rem;
+            display: flex; flex-direction: column;
+            transition: right 0.6s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         .drawer-open .booking-drawer { right: 0; }
         .drawer-open .drawer-overlay { opacity: 1; visibility: visible; }
 
         .drawer-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border-faint);
+            padding-bottom: 1rem;
         }
 
-        .drawer-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            color: #d4af37;
-        }
+        .drawer-header h2 { font-family: 'Playfair Display', serif; font-weight: 400; color: var(--gold-metallic); }
+        .close-btn { background: none; border: none; color: #fff; font-size: 2rem; cursor: pointer; }
 
-        .close-btn {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 2rem;
-            cursor: pointer;
-            line-height: 1;
-            opacity: 0.5;
-            transition: opacity 0.3s;
-        }
-
-        .close-btn:hover { opacity: 1; }
-
-        .input-group { margin-bottom: 25px; }
-        .input-group label {
-            display: block;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #888;
-            margin-bottom: 10px;
-        }
+        .input-group { margin-bottom: 2rem; }
+        .input-group label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold-muted); margin-bottom: 0.5rem; }
         .input-group input, .input-group select {
-            width: 100%;
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid #333;
-            color: #fff;
-            padding: 10px 0;
-            font-size: 1rem;
-            font-family: 'Inter', sans-serif;
-            outline: none;
+            width: 100%; background: transparent; border: none;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            color: #fff; padding: 0.5rem 0; font-family: 'Inter', sans-serif; outline: none;
             transition: border-color 0.3s;
         }
-        .input-group input:focus, .input-group select:focus {
-            border-bottom: 1px solid #d4af37;
-        }
+        .input-group input:focus, .input-group select:focus { border-bottom-color: var(--gold-metallic); }
 
         .confirm-btn {
-            margin-top: auto;
-            width: 100%;
-            padding: 20px;
-            background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
-            color: #040d08;
-            border: none;
-            font-size: 1rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            cursor: pointer;
-            text-transform: uppercase;
+            margin-top: auto; width: 100%; padding: 1.5rem;
+            background: var(--gold-metallic); color: var(--emerald-black);
+            border: none; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; cursor: pointer;
         }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
+            .grid-layout, .grid-layout.reverse { grid-template-columns: 1fr; gap: 2rem; }
+            .hero h1 { font-size: 12vw; }
             .booking-drawer { width: 100%; }
-            .title { font-size: 12vw; }
         }
     </style>
 </head>
 <body>
 
-    <canvas id="smokeCanvas"></canvas>
+    <!-- Nav -->
+    <nav>
+        <a class="nav-link">Menu</a>
+        <a class="nav-link" id="navBookBtn">Reservations</a>
+    </nav>
 
-    <div class="hero-ui">
-        <!-- Logo Image Placeholder -->
-        <div class="brand-logo"></div>
+    <!-- Hero -->
+    <section class="hero">
+        <canvas id="emberCanvas"></canvas>
+        <div class="hero-content">
+            <div class="brand-logo"></div>
+            <h1>The Royal<br><span class="gold-text">Indian Journey.</span></h1>
+            <button class="btn-primary" id="heroBookBtn">Request a Table</button>
+        </div>
+    </section>
+
+    <!-- Editorial Scroll Layout -->
+    <section class="editorial-section">
         
-        <span class="subtitle">Navi Mumbai's Most Exclusive</span>
-        <h1 class="title">GAZEBO DHABA</h1>
-        <button class="book-btn" id="openDrawerBtn">Reserve VIP Table</button>
-    </div>
+        <!-- Row 1: The Sizzler (Offset Right) -->
+        <div class="grid-layout">
+            <div class="text-block">
+                <span class="micro-heading">Signature Platter</span>
+                <h2>The Moroccan<br>Seafood Sizzler</h2>
+                <p>An orchestration of heat and spice. Fresh coastal catch infused with Moroccan aromatics, served on a smoking cast-iron canvas. A sensory experience that transcends the traditional dining format.</p>
+            </div>
+            <div class="image-wrapper gs-reveal">
+                <!-- Replace with their actual sizzler image if you have it -->
+                <img class="gs-parallax" src="https://images.unsplash.com/photo-1544025162-8315ea070d5b?q=80&w=2070&auto=format&fit=crop" alt="Seafood Sizzler">
+                <div class="hover-cart-overlay">
+                    <span class="add-text">Add to Order +</span>
+                </div>
+            </div>
+        </div>
 
+        <!-- Row 2: The Ambience (Offset Left) -->
+        <div class="grid-layout reverse">
+            <div class="image-wrapper gs-reveal">
+                <!-- Replace with their Dhaba night-time wide shot -->
+                <img class="gs-parallax" src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1974&auto=format&fit=crop" alt="Dhaba Ambience">
+            </div>
+            <div class="text-block">
+                <span class="micro-heading">The Atmosphere</span>
+                <h2>A Canvas of<br>Light & Smoke</h2>
+                <p>Designed for scale and intimacy. Underneath a canopy of ambient lights, the Gazebo Dhaba provides a cinematic backdrop for celebrations, corporate gatherings, and unforgettable evenings.</p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- VIP Drawer -->
     <div class="drawer-overlay" id="drawerOverlay"></div>
     <div class="booking-drawer">
         <div class="drawer-header">
-            <h2 class="drawer-title">Reservation</h2>
+            <h2>Reservations</h2>
             <button class="close-btn" id="closeDrawerBtn">&times;</button>
         </div>
-        
         <div class="input-group">
             <label>Date & Time</label>
             <input type="datetime-local">
         </div>
-        
         <div class="input-group">
-            <label>Guests</label>
+            <label>Party Size</label>
             <select>
-                <option value="2">2 Guests</option>
-                <option value="4">4 Guests</option>
-                <option value="6">6 Guests</option>
-                <option value="8+">8+ Guests (VIP Platter)</option>
+                <option>2 Guests</option>
+                <option>4 Guests - Standard</option>
+                <option>6+ Guests - VIP Platter</option>
             </select>
         </div>
-
-        <button class="confirm-btn">Confirm Booking</button>
+        <button class="confirm-btn">Confirm Details</button>
     </div>
 
+    <!-- GSAP Libraries for Premium Animation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
     <script>
-        const openBtn = document.getElementById('openDrawerBtn');
-        const closeBtn = document.getElementById('closeDrawerBtn');
-        const overlay = document.getElementById('drawerOverlay');
+        // --- 1. DRAWER LOGIC ---
+        const toggleDrawer = () => document.body.classList.toggle('drawer-open');
+        document.getElementById('heroBookBtn').addEventListener('click', toggleDrawer);
+        document.getElementById('navBookBtn').addEventListener('click', toggleDrawer);
+        document.getElementById('closeDrawerBtn').addEventListener('click', toggleDrawer);
+        document.getElementById('drawerOverlay').addEventListener('click', toggleDrawer);
 
-        openBtn.addEventListener('click', () => document.body.classList.add('drawer-open'));
-        closeBtn.addEventListener('click', () => document.body.classList.remove('drawer-open'));
-        overlay.addEventListener('click', () => document.body.classList.remove('drawer-open'));
+        // --- 2. GSAP SCROLL ANIMATIONS (The "Wow" Factor) ---
+        gsap.registerPlugin(ScrollTrigger);
 
-        const canvas = document.getElementById('smokeCanvas');
+        // Animate images revealing (unmasking) as you scroll down
+        gsap.utils.toArray('.gs-reveal').forEach(wrapper => {
+            gsap.to(wrapper, {
+                clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)", // Fully revealed
+                ease: "power3.inOut",
+                duration: 1.5,
+                scrollTrigger: {
+                    trigger: wrapper,
+                    start: "top 85%", // Triggers when the top of the image hits 85% down the viewport
+                }
+            });
+        });
+
+        // Parallax effect on the images inside the wrappers
+        gsap.utils.toArray('.gs-parallax').forEach(img => {
+            gsap.to(img, {
+                y: "20%", // Moves the image down slightly while you scroll down
+                ease: "none",
+                scrollTrigger: {
+                    trigger: img.parentElement,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true // Ties animation strictly to scroll bar
+                }
+            });
+        });
+
+
+        // --- 3. AMBIENT EMBER CANVAS (Background Hero) ---
+        const canvas = document.getElementById('emberCanvas');
         const ctx = canvas.getContext('2d');
-        
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-
-        let particles = [];
-        let mouse = { x: canvas.width / 2, y: canvas.height / 2, moved: false };
-
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.x;
-            mouse.y = e.y;
-            mouse.moved = true;
-        });
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        class SmokeParticle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = canvas.height + Math.random() * 100; 
-                this.size = Math.random() * 60 + 20;
-                this.speedX = Math.random() * 1 - 0.5;
-                this.speedY = Math.random() * -1.5 - 0.5; 
-                this.color = `rgba(200, 200, 200, ${Math.random() * 0.04})`; 
-                this.life = 100;
-            }
-
-            update() {
-                if (mouse.moved) {
-                    let dx = mouse.x - this.x;
-                    let dy = mouse.y - this.y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < 150) {
-                        this.x -= dx * 0.02;
-                        this.speedY -= 0.05; 
-                    }
-                }
-
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.size += 0.2; 
-                
-                if (this.y < -100 || this.size > 200) {
-                    this.y = canvas.height + 50;
-                    this.x = Math.random() * canvas.width;
-                    this.size = Math.random() * 60 + 20;
-                    this.speedY = Math.random() * -1.5 - 0.5;
-                }
-            }
-
-            draw() {
-                ctx.beginPath();
-                let gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
-                gradient.addColorStop(0, this.color);
-                gradient.addColorStop(1, 'transparent');
-                ctx.fillStyle = gradient;
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        const particleCount = Math.floor(window.innerWidth / 10);
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new SmokeParticle());
-        }
 
         class Ember {
             constructor() {
                 this.x = Math.random() * canvas.width;
-                this.y = canvas.height + 100;
-                this.size = Math.random() * 3 + 1;
-                this.speedY = Math.random() * -3 - 1;
-                this.speedX = Math.random() * 2 - 1;
-                this.opacity = Math.random() * 1;
+                this.y = canvas.height + Math.random() * 100;
+                this.size = Math.random() * 2.5 + 0.5;
+                this.speedY = Math.random() * -1.5 - 0.5;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.opacity = Math.random() * 0.8;
             }
             update() {
                 this.y += this.speedY;
-                this.x += this.speedX + Math.sin(this.y * 0.02); 
-                this.opacity -= 0.005;
-                if (this.opacity <= 0 || this.y < 0) {
+                this.x += this.speedX + Math.sin(this.y * 0.01) * 0.5;
+                this.opacity -= 0.002;
+                
+                if (this.y < 0 || this.opacity <= 0) {
                     this.y = canvas.height + 10;
                     this.x = Math.random() * canvas.width;
-                    this.opacity = 1;
+                    this.opacity = Math.random() * 0.8;
                 }
             }
             draw() {
                 ctx.beginPath();
-                // Updated embers to match the new gold logo color
-                ctx.fillStyle = `rgba(212, 175, 55, ${this.opacity})`;
+                ctx.fillStyle = `rgba(212, 175, 55, ${this.opacity})`; // Metallic Gold Embers
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
             }
         }
 
         let embers = [];
-        for (let i = 0; i < 30; i++) { embers.push(new Ember()); }
+        for (let i = 0; i < 40; i++) embers.push(new Ember());
 
-        function animate() {
+        function animateCanvas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            particles.forEach(p => { p.update(); p.draw(); });
             embers.forEach(e => { e.update(); e.draw(); });
-            
-            requestAnimationFrame(animate);
+            requestAnimationFrame(animateCanvas);
         }
+        animateCanvas();
 
-        animate();
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
     </script>
 </body>
 </html>
