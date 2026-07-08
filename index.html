@@ -3,223 +3,375 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cinematic Portfolio | Luxury Curation</title>
+    <title>Gazebo Dhaba | Exclusive VIP Booking</title>
     
-    <!-- Premium Editorial Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,600;0,800;1,400&display=swap" rel="stylesheet">
     
     <style>
-        /* --- RESET & LUXURY BASE --- */
+        /* --- RESET & BRANDED ROYAL BASE --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        body { 
-            background-color: #0c0c0c; /* Off-Black, softer on the eyes than pure black */
-            color: #e6e4dc; /* Bone/Oat, mimics expensive print paper */
-            font-family: 'Inter', sans-serif; 
-            overflow-x: hidden; 
-            cursor: default;
+        body, html {
+            width: 100%;
+            height: 100%;
+            /* Updated to match the deep forest green/black from their logo */
+            background-color: #040d08; 
+            color: #f4f4f0;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; 
         }
 
-        /* --- THE EDITORIAL GRID --- */
-        .container {
+        /* --- THE INTERACTIVE SMOKE CANVAS --- */
+        #smokeCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            min-height: 100vh;
+            height: 100%;
+            z-index: 1;
+            pointer-events: auto; 
+        }
+
+        /* --- HERO CONTENT UI --- */
+        .hero-ui {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 10vw 5vw;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(230, 228, 220, 0.15);
-            padding-bottom: 20px;
-            margin-bottom: 10vh;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            color: #a09e98;
+            pointer-events: none; 
+            /* Subtle green radial gradient */
+            background: radial-gradient(circle at center, transparent 0%, rgba(4,13,8,0.9) 100%);
         }
 
-        /* --- THE PORTFOLIO LIST --- */
-        .portfolio-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
+        /* The Logo Container */
+        .brand-logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+            border-radius: 50%;
+            /* Add the image file name here once it's on your computer */
+            background: url('YOUR_LOGO_FILE_NAME.png') center/cover no-repeat;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+            animation: fadeIn 2s ease-out;
         }
 
-        .portfolio-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 3.5vh 0;
-            border-bottom: 1px solid rgba(230, 228, 220, 0.05);
-            cursor: pointer;
-            transition: opacity 0.4s ease;
-        }
-
-        /* When hovering over the list, fade out the items NOT being hovered */
-        .portfolio-list:hover .portfolio-item {
-            opacity: 0.3;
-        }
-        .portfolio-list .portfolio-item:hover {
-            opacity: 1;
-        }
-
-        .item-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 5vw;
-            font-weight: 400;
-            line-height: 1;
-            pointer-events: none; /* Prevents cursor glitching */
-        }
-
-        .item-category {
-            font-family: 'Inter', sans-serif;
+        .subtitle {
             font-size: 0.85rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            pointer-events: none;
+            letter-spacing: 4px;
+            /* Exact Metallic Gold from logo */
+            color: #d4af37; 
+            margin-bottom: 10px;
+            animation: fadeIn 2s ease-out;
         }
 
-        /* --- THE MAGNETIC CURSOR MEDIA --- */
-        .cursor-media-wrapper {
+        .title {
+            font-family: 'Playfair Display', serif;
+            font-size: 6vw;
+            font-weight: 800;
+            line-height: 1;
+            text-align: center;
+            margin-bottom: 40px;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            animation: slideUp 1.5s ease-out;
+        }
+
+        /* --- MAGNETIC BOOKING BUTTON --- */
+        .book-btn {
+            pointer-events: auto; 
+            padding: 18px 40px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #040d08;
+            /* Gold gradient to mimic the metallic shine */
+            background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+
+        .book-btn:hover {
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* --- FROSTED GLASS BOOKING DRAWER --- */
+        .drawer-overlay {
             position: fixed;
             top: 0;
             left: 0;
-            width: 320px; /* Vertical cinematic aspect ratio */
-            height: 480px;
-            pointer-events: none; /* Crucial: lets the mouse click "through" the image */
-            z-index: 100;
-            opacity: 0; /* Hidden by default */
-            transform: translate(-50%, -50%) scale(0.8);
-            transform-origin: center center;
-            overflow: hidden;
-            will-change: transform, opacity;
-        }
-
-        .cursor-media-wrapper img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            /* Inner parallax effect setup */
-            transform: scale(1.1);
-            will-change: transform;
-        }
-        
-        /* Subtle noise overlay for texture */
-        .noise {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 999;
-            background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.05"/%3E%3C/svg%3E');
+            background: rgba(0,0,0,0.7);
+            z-index: 9;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
         }
 
-        @media (max-width: 768px) {
-            .item-title { font-size: 8vw; }
-            .item-category { display: none; /* Hide technical details on mobile for cleaner look */ }
-            .cursor-media-wrapper { display: none; /* Disable hover effect on touch screens */ }
+        .booking-drawer {
+            position: fixed;
+            top: 0;
+            right: -100%; 
+            width: 400px;
+            height: 100%;
+            /* Deep green frosted glass */
+            background: rgba(8, 20, 13, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(212, 175, 55, 0.2);
+            z-index: 10;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            transition: right 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .drawer-open .booking-drawer { right: 0; }
+        .drawer-open .drawer-overlay { opacity: 1; visibility: visible; }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .drawer-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #d4af37;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            line-height: 1;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+
+        .close-btn:hover { opacity: 1; }
+
+        .input-group { margin-bottom: 25px; }
+        .input-group label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+        .input-group input, .input-group select {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #333;
+            color: #fff;
+            padding: 10px 0;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .input-group input:focus, .input-group select:focus {
+            border-bottom: 1px solid #d4af37;
+        }
+
+        .confirm-btn {
+            margin-top: auto;
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
+            color: #040d08;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 600px) {
+            .booking-drawer { width: 100%; }
+            .title { font-size: 12vw; }
         }
     </style>
 </head>
 <body>
 
-    <div class="noise"></div>
+    <canvas id="smokeCanvas"></canvas>
 
-    <div class="container">
-        <header class="header">
-            <span>Selected Works</span>
-            <span>2024 — 2026</span>
-        </header>
-
-        <!-- The List -->
-        <ul class="portfolio-list">
-            <!-- Data-image attribute holds the media source -->
-            <li class="portfolio-item" data-image="https://images.unsplash.com/photo-1606800052052-a08af7148866?q=80&w=1974&auto=format&fit=crop">
-                <h2 class="item-title">The Frame Studio Campaign</h2>
-                <span class="item-category">Multi-Scene Cinematic</span>
-            </li>
-            <li class="portfolio-item" data-image="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1974&auto=format&fit=crop">
-                <h2 class="item-title">Elegance in Motion</h2>
-                <span class="item-category">Vertical Video Reel</span>
-            </li>
-            <li class="portfolio-item" data-image="https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?q=80&w=1978&auto=format&fit=crop">
-                <h2 class="item-title">The Midnight Edit</h2>
-                <span class="item-category">Wedding Editorial</span>
-            </li>
-            <li class="portfolio-item" data-image="https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=2070&auto=format&fit=crop">
-                <h2 class="item-title">Raw & Uncut</h2>
-                <span class="item-category">Color Grading Study</span>
-            </li>
-        </ul>
+    <div class="hero-ui">
+        <!-- Logo Image Placeholder -->
+        <div class="brand-logo"></div>
+        
+        <span class="subtitle">Navi Mumbai's Most Exclusive</span>
+        <h1 class="title">GAZEBO DHABA</h1>
+        <button class="book-btn" id="openDrawerBtn">Reserve VIP Table</button>
     </div>
 
-    <!-- The Floating Image Wrapper -->
-    <div class="cursor-media-wrapper" id="cursor-wrapper">
-        <img src="" alt="Portfolio Preview" id="cursor-img">
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <div class="booking-drawer">
+        <div class="drawer-header">
+            <h2 class="drawer-title">Reservation</h2>
+            <button class="close-btn" id="closeDrawerBtn">&times;</button>
+        </div>
+        
+        <div class="input-group">
+            <label>Date & Time</label>
+            <input type="datetime-local">
+        </div>
+        
+        <div class="input-group">
+            <label>Guests</label>
+            <select>
+                <option value="2">2 Guests</option>
+                <option value="4">4 Guests</option>
+                <option value="6">6 Guests</option>
+                <option value="8+">8+ Guests (VIP Platter)</option>
+            </select>
+        </div>
+
+        <button class="confirm-btn">Confirm Booking</button>
     </div>
 
-    <!-- GSAP for Buttery Smooth Animation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    
     <script>
-        const cursorWrapper = document.getElementById('cursor-wrapper');
-        const cursorImg = document.getElementById('cursor-img');
-        const portfolioItems = document.querySelectorAll('.portfolio-item');
+        const openBtn = document.getElementById('openDrawerBtn');
+        const closeBtn = document.getElementById('closeDrawerBtn');
+        const overlay = document.getElementById('drawerOverlay');
 
-        // GSAP's quickTo is optimized for elements that track the mouse 60 times a second
-        const xTo = gsap.quickTo(cursorWrapper, "x", { duration: 0.4, ease: "power3.out" });
-        const yTo = gsap.quickTo(cursorWrapper, "y", { duration: 0.4, ease: "power3.out" });
+        openBtn.addEventListener('click', () => document.body.classList.add('drawer-open'));
+        closeBtn.addEventListener('click', () => document.body.classList.remove('drawer-open'));
+        overlay.addEventListener('click', () => document.body.classList.remove('drawer-open'));
 
-        // Update mouse position
-        window.addEventListener("mousemove", (e) => {
-            xTo(e.clientX);
-            yTo(e.clientY);
+        const canvas = document.getElementById('smokeCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+        let mouse = { x: canvas.width / 2, y: canvas.height / 2, moved: false };
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+            mouse.moved = true;
         });
 
-        // Add hover effects to each list item
-        portfolioItems.forEach(item => {
-            item.addEventListener('mouseenter', (e) => {
-                // 1. Swap the image source to the one specified in the HTML data attribute
-                const imgSource = item.getAttribute('data-image');
-                cursorImg.src = imgSource;
-
-                // 2. Animate the wrapper in (Scale up from 0.8 to 1, and fade in)
-                gsap.to(cursorWrapper, {
-                    opacity: 1,
-                    scale: 1,
-                    duration: 0.5,
-                    ease: "expo.out"
-                });
-
-                // 3. Subtle inner image parallax (Image scales down slightly as it appears)
-                gsap.to(cursorImg, {
-                    scale: 1,
-                    duration: 0.5,
-                    ease: "expo.out"
-                });
-            });
-
-            item.addEventListener('mouseleave', () => {
-                // Animate out (Scale down and fade out)
-                gsap.to(cursorWrapper, {
-                    opacity: 0,
-                    scale: 0.8,
-                    duration: 0.4,
-                    ease: "power2.out"
-                });
-
-                // Reset inner image scale for the next hover
-                gsap.to(cursorImg, {
-                    scale: 1.1,
-                    duration: 0.4,
-                    ease: "power2.out"
-                });
-            });
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         });
+
+        class SmokeParticle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + Math.random() * 100; 
+                this.size = Math.random() * 60 + 20;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * -1.5 - 0.5; 
+                this.color = `rgba(200, 200, 200, ${Math.random() * 0.04})`; 
+                this.life = 100;
+            }
+
+            update() {
+                if (mouse.moved) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 150) {
+                        this.x -= dx * 0.02;
+                        this.speedY -= 0.05; 
+                    }
+                }
+
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.size += 0.2; 
+                
+                if (this.y < -100 || this.size > 200) {
+                    this.y = canvas.height + 50;
+                    this.x = Math.random() * canvas.width;
+                    this.size = Math.random() * 60 + 20;
+                    this.speedY = Math.random() * -1.5 - 0.5;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                let gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+                gradient.addColorStop(0, this.color);
+                gradient.addColorStop(1, 'transparent');
+                ctx.fillStyle = gradient;
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        const particleCount = Math.floor(window.innerWidth / 10);
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new SmokeParticle());
+        }
+
+        class Ember {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 100;
+                this.size = Math.random() * 3 + 1;
+                this.speedY = Math.random() * -3 - 1;
+                this.speedX = Math.random() * 2 - 1;
+                this.opacity = Math.random() * 1;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX + Math.sin(this.y * 0.02); 
+                this.opacity -= 0.005;
+                if (this.opacity <= 0 || this.y < 0) {
+                    this.y = canvas.height + 10;
+                    this.x = Math.random() * canvas.width;
+                    this.opacity = 1;
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                // Updated embers to match the new gold logo color
+                ctx.fillStyle = `rgba(212, 175, 55, ${this.opacity})`;
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        let embers = [];
+        for (let i = 0; i < 30; i++) { embers.push(new Ember()); }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(p => { p.update(); p.draw(); });
+            embers.forEach(e => { e.update(); e.draw(); });
+            
+            requestAnimationFrame(animate);
+        }
+
+        animate();
     </script>
 </body>
 </html>
